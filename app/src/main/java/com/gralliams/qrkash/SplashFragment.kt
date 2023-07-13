@@ -2,19 +2,25 @@ package com.gralliams.qrkash
 
 import android.animation.ObjectAnimator
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.databinding.DataBindingUtil
-import com.gralliams.qrkash.databinding.ActivitySplashBinding
+import com.gralliams.qrkash.databinding.FragmentSplashBinding
 
-class SplashActivity : AppCompatActivity() {
-    private lateinit var  binding: ActivitySplashBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+class SplashFragment : Fragment() {
+    private lateinit var binding: FragmentSplashBinding
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_splash, container, false)
         val splashImage = binding.splashImage
 
 
@@ -28,9 +34,11 @@ class SplashActivity : AppCompatActivity() {
 
         // Use a handler to post a delayed action to open the main activity after the splash screen duration
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(applicationContext, MainActivity::class.java))
-            finish()
+            startActivity(Intent(context, MainActivity::class.java))
         }, 3000)
 
+        return binding.root
     }
+
+
 }
