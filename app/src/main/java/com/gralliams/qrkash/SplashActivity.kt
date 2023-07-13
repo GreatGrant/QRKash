@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.databinding.DataBindingUtil
+import com.gralliams.qrkash.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
+    private lateinit var  binding: ActivitySplashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
-        val splashImage = findViewById<ImageView>(R.id.splash_image)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+        val splashImage = binding.splashImage
+
 
         // Create an alpha fade animation for the splash image
         val alphaAnimator = ObjectAnimator.ofFloat(splashImage, "alpha", 0f, 1f)
