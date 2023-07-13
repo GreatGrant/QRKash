@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "746450386268",
+    "project_id": "qrkash-136a0",
+    "storage_bucket": "qrkash-136a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746450386268:android:2a7ae61b7a6fd4530d1599",
+        "android_client_info": {
+          "package_name": "com.gralliams.qrkash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746450386268-gigja6ro8l70svqufjid43ll6d5hfjsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtr_aL8bi2bk3CKIShNpSen6KqYcMoFN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746450386268-gigja6ro8l70svqufjid43ll6d5hfjsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
