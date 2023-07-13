@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.gralliams.qrkash.databinding.FragmentSplashBinding
 
 class SplashFragment : Fragment() {
@@ -34,7 +35,7 @@ class SplashFragment : Fragment() {
 
         // Use a handler to post a delayed action to open the main activity after the splash screen duration
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(context, MainActivity::class.java))
+            findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
         }, 3000)
 
         return binding.root
