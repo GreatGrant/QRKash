@@ -1,6 +1,7 @@
 package com.gralliams.qrkash
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -54,19 +55,39 @@ class SignupFragment : Fragment() {
             return
         }
 
+        // Validate password length
+        if (password.length < 6) {
+            binding.etPassword.error = "Password must be at least 6 characters"
+            return
+        }
+
         if (password != confirmPassword) {
             binding.etConfirmPassword.error = "Passwords do not match"
             return
         }
 
-        aunthenticateUser(email, password, fullName)
+
+
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val signInMethods = task.result?.signInMethods
+                    if (!signInMethods.isNullOrEmpty()) {
+                        // User with the provided email already exists
+                        binding.etEmailAddress.error = "Email address is already registered"
+                        return@addOnCompleteListener
+                    }
+                }
+            }
+                    authenticateUser(email, password, fullName)
     }
 
-    private fun aunthenticateUser(email: String, password: String, fullName: String) {
+    private fun authenticateUser(email: String, password: String, fullName: String) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Registration success, user account created
+                    Toast.makeText(context, "Registration Succesful", Toast.LENGTH_SHORT).show()
                     val user = task.result?.user
 
                     // Update the user's display name with the full name
@@ -83,6 +104,7 @@ class SignupFragment : Fragment() {
                             } else {
                                 // Profile update failed
                                 val exception = updateProfileTask.exception
+                                Log.e("Registration", "Failure: ${exception?.message}")
                                 // Handle the error, display an error message, or take appropriate action
                                 Toast.makeText(context, "Failed to create user", Toast.LENGTH_SHORT).show()
                             }
@@ -90,6 +112,7 @@ class SignupFragment : Fragment() {
                 } else {
                     // Registration failed
                     val exception = task.exception
+                    Log.e("Registration", "Registration failed: ${exception?.message}")
                     // Handle the error, display an error message, or take appropriate action
                     Toast.makeText(context, "Registration Failed", Toast.LENGTH_SHORT).show()
                 }
