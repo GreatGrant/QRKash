@@ -1,10 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_btn"
         tools:context=".DashboardFragment">
+
+        <!-- Curved White Part -->
+
+        <!-- Search Bar -->
+        <ImageView
+            android:id="@+id/ivCurvedWhitePart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/rectangle_21_usd_2" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSearchBar"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/ivCurvedWhitePart"
+            app:layout_constraintTop_toTopOf="@id/ivCurvedWhitePart">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/baseline_search_24"
+                android:hint="Search"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- User Name -->
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Username"
+            app:layout_constraintEnd_toStartOf="@+id/ivAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/tilSearchBar" />
+
+        <!-- Avatar Image -->
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="52dp"
+            android:layout_height="66dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilSearchBar"
+            android:src="@drawable/baseline_person_4_24"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <!-- "Hello User" Text -->
+        <TextView
+            android:id="@+id/tvHelloUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Hello User,\nYour available balance is:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivAvatar" />
+
+        <!-- Balance Amount Text -->
+        <TextView
+            android:id="@+id/tvBalanceAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="₦50000"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.484"
+            app:layout_constraintStart_toEndOf="@+id/tvHelloUser"
+            app:layout_constraintTop_toBottomOf="@+id/ivAvatar" />
+
+        <!-- Buttons Row -->
+        <LinearLayout
+            android:id="@+id/llButtonsRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/listViewTransactionHistory"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBalanceAmount">
+
+        </LinearLayout>
+
+        <!-- ListView -->
+        <ListView
+            android:id="@+id/listViewTransactionHistory"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guidelineBottom" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <Button
+            android:id="@+id/btnTransfer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Transfer"
+            app:layout_constraintEnd_toStartOf="@+id/btnTopup"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivCurvedWhitePart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHelloUser" />
+
+        <Button
+            android:id="@+id/btnTopup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="Topup"
+            app:layout_constraintEnd_toStartOf="@+id/btnHistory"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnTransfer"
+            app:layout_constraintTop_toBottomOf="@+id/tvHelloUser" />
+
+        <Button
+            android:id="@+id/btnHistory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:text="History"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnTopup"
+            app:layout_constraintTop_toBottomOf="@+id/tvHelloUser" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

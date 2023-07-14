@@ -25,12 +25,19 @@
         <action
             android:id="@+id/action_welcomeFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         tools:layout="@layout/fragment_login"
         android:name="com.gralliams.qrkash.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signupFragment"
         tools:layout="@layout/fragment_signup"

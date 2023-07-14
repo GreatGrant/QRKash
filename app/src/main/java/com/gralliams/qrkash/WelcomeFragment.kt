@@ -35,7 +35,7 @@ class WelcomeFragment : Fragment() {
         setViewItems(binding, adapter)
 
         binding.btnLogin.setOnClickListener {
-            findNavController().navigate(R.id.action_welcomeFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_welcomeFragment_to_dashboardFragment)
         }
 
         binding.btnGetStarted.setOnClickListener {
