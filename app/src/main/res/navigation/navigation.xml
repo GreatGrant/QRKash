@@ -38,6 +38,8 @@
         android:label="SignupFragment" >
         <action
             android:id="@+id/action_signupFragment_to_dashboardFragment"
+            app:popUpTo="@id/signupFragment"
+            app:popUpToInclusive="true"
             app:destination="@id/dashboardFragment" />
     </fragment>
     <fragment
