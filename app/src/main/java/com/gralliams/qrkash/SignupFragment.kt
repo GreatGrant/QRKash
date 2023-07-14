@@ -75,6 +75,7 @@ class SignupFragment : Fragment() {
                     if (!signInMethods.isNullOrEmpty()) {
                         // User with the provided email already exists
                         binding.etEmailAddress.error = "Email address is already registered"
+                        Toast.makeText(context, "Email address is already registered", Toast.LENGTH_SHORT).show()
                         return@addOnCompleteListener
                     }
                 }
