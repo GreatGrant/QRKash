@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.databinding.FragmentSignupBinding
 
@@ -18,15 +19,15 @@ class SignupFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
-//        val email = binding.etEmailAddress.toString()
-//        val password = binding.etPassword.toString()
-//
-//        auth = FirebaseAuth.getInstance()
-//        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {task ->
-//            if(task.isSuccessful){
-//
-//            }
-//        }
+        val email = binding.etEmailAddress.toString()
+        val password = binding.etPassword.toString()
+
+        auth = FirebaseAuth.getInstance()
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {task ->
+            if(task.isSuccessful){
+                findNavController().navigate(R.id.action_signupFragment_to_dashboardFragment)
+            }
+        }
         return binding.root
     }
 
