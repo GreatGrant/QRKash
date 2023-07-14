@@ -22,10 +22,18 @@
         <action
             android:id="@+id/action_welcomeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         tools:layout="@layout/fragment_login"
         android:name="com.gralliams.qrkash.LoginFragment"
         android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/signupFragment"
+        tools:layout="@layout/fragment_signup"
+        android:name="com.gralliams.qrkash.SignupFragment"
+        android:label="SignupFragment" />
 </navigation>

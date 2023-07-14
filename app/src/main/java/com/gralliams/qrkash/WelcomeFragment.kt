@@ -38,6 +38,10 @@ class WelcomeFragment : Fragment() {
             findNavController().navigate(R.id.action_welcomeFragment_to_loginFragment)
         }
 
+        binding.btnGetStarted.setOnClickListener {
+            findNavController().navigate(R.id.action_welcomeFragment_to_signupFragment)
+        }
+
         return binding.root
     }
     private fun setViewItems(view: FragmentWelcomeBinding, adapter: ViewPagerAdapter) {
