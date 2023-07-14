@@ -26,7 +26,9 @@ class SignupFragment : Fragment() {
             validateFields()
         }
 
-
+        binding.tvSign.setOnClickListener{
+            findNavController().navigate(R.id.action_signupFragment_to_loginFragment)
+        }
         return binding.root
     }
 

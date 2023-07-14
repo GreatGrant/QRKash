@@ -28,8 +28,11 @@ class LoginFragment : Fragment() {
             // Perform automatic login
             findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
         }
-        auth = FirebaseAuth.getInstance()
 
+        binding.tvCreateAccount.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_signupFragment)
+        }
+        auth = FirebaseAuth.getInstance()
         // Set up login button click listener
         binding.btnSignIn.setOnClickListener {
             login()

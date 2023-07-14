@@ -47,6 +47,8 @@
             android:hint="Amount ₦"
             android:background="#018BD3"
             android:textColorHint="#FFFFFF"
+            app:placeholderTextColor="@color/white"
+            app:hintTextColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

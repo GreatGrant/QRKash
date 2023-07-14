@@ -173,7 +173,7 @@
             app:layout_constraintTop_toBottomOf="@id/btnCreateAccount" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tvSign"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text=" Sign in"
