@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/lady_opacity"
+        android:background="@drawable/lady_opacity2"
         tools:context=".WelcomeFragment">
 
 
@@ -20,9 +20,9 @@
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/indicator"
             app:circularflow_angles="16dp"
-            app:ci_drawable="@color/color_btn"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            app:ci_drawable="@drawable/indicator"
             app:layout_constraintBottom_toBottomOf="@+id/onboarding_viewpager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

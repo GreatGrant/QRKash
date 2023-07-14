@@ -27,7 +27,7 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="Simply scan to accept and make payments"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
