@@ -41,7 +41,7 @@ class DashboardFragment : Fragment() {
         val options = arrayOf("Use QR code", "Use bank transfer")
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Topup Options")
+            .setTitle("Topup Account")
             .setItems(options) { _, index ->
                 when (index) {
                     0 -> {
