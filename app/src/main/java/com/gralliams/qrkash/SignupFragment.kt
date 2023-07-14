@@ -21,8 +21,10 @@ class SignupFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, container, false)
+        binding.btnCreateAccount.setOnClickListener {
+            validateFields()
+        }
 
-        validateFields()
 
         return binding.root
     }
