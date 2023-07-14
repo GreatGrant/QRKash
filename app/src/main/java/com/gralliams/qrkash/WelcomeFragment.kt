@@ -20,7 +20,12 @@ class WelcomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
 
-        val fragmentList = arrayListOf<Fragment>()
+        val fragmentList = arrayListOf<Fragment>(
+            ViewPagerFragmentOne(),
+            ViewPagerFragmentTwo(),
+            ViewPagerFragmentThree()
+        )
+
         val adapter = ViewPagerAdapter(
             list = fragmentList,
             lifecycle = lifecycle,

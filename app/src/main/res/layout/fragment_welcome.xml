@@ -19,8 +19,8 @@
 
         <me.relex.circleindicator.CircleIndicator3
             android:id="@+id/indicator"
+            app:circularflow_angles="16dp"
             app:ci_drawable="@color/color_btn"
-            app:circularflow_angles="12dp"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/onboarding_viewpager"
