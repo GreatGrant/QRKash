@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.databinding.FragmentDashBoardBinding
@@ -46,7 +47,7 @@ class DashboardFragment : Fragment() {
                 when (index) {
                     0 -> {
                         // Handle "Use QR code" option
-                        // TODO: Implement the action for using QR code
+                        findNavController().navigate(R.id.action_dashboardFragment_to_qrGenerateFragment)
                     }
                     1 -> {
                         // Handle "Use bank transfer" option

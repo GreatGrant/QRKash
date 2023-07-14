@@ -51,6 +51,24 @@
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
+        tools:layout="@layout/fragment_dash_board"
         android:name="com.gralliams.qrkash.DashboardFragment"
-        android:label="DashboardFragment" />
+        android:label="DashboardFragment" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_qrGenerateFragment"
+            app:destination="@id/qrGenerateFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_qrScanFragment"
+            app:destination="@id/qrScanFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrGenerateFragment"
+        android:name="com.gralliams.qrkash.QrGenerateFragment"
+        android:label="fragment_qr_generate"
+        tools:layout="@layout/fragment_qr_generate" />
+    <fragment
+        android:id="@+id/qrScanFragment"
+        android:name="com.gralliams.qrkash.QrScanFragment"
+        android:label="fragment_qr_scan"
+        tools:layout="@layout/fragment_qr_scan" />
 </navigation>
