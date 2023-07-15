@@ -8,3 +8,4 @@ class VirtualAccountRepository(private val apiService: FlutterwaveApiService) {
         return apiService.createVirtualAccount(requestBody)
     }
 }
+

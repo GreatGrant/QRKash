@@ -51,7 +51,7 @@ class DashboardFragment : Fragment() {
                     }
                     1 -> {
                         // Handle "Use bank transfer" option
-                        // TODO: Implement the action for using bank transfer
+                        findNavController().navigate(R.id.action_dashboardFragment_to_virtualAccountFragment)
                     }
                 }
             }
