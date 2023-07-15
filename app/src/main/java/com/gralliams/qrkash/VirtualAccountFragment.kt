@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.api.RetrofitClient
 import com.gralliams.qrkash.databinding.FragmentVirtualAccountBinding
@@ -17,6 +18,7 @@ import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class VirtualAccountFragment : Fragment() {
@@ -70,4 +72,10 @@ class VirtualAccountFragment : Fragment() {
 
         return binding.root
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.viewModelScope.cancel()
+    }
+
 }
