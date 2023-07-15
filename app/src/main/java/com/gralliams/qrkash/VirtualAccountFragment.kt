@@ -59,7 +59,8 @@ class VirtualAccountFragment : Fragment() {
                 val bankName = accountResponse.data.bankName
                 val accountNumber = accountResponse.data.accountNumber
                 // Update UI with the retrieved data
-                binding.textView3.text = getString(R.string.virtual_account_statement)
+                binding.textView3.text = accountResponse.message
+//                    getString(R.string.virtual_account_statement)
             }
         }
 

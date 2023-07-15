@@ -2,6 +2,7 @@ package com.gralliams.qrkash.api
 
 import com.gralliams.qrkash.BuildConfig
 import com.gralliams.qrkash.BuildConfig.API_KEY
+import com.gralliams.qrkash.constants.BASE_URL
 import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.model.VirtualAccountResponse
 import okhttp3.OkHttpClient
@@ -10,15 +11,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
-
 object RetrofitClient {
-    private const val BASE_URL = "https://fsi.ng/api/v1/"
-    private const val API_KEY = BuildConfig.API_KEY
+
 
     private val retrofit: Retrofit by lazy {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
+                    .addHeader("Connection", " keep-alive")
                     .addHeader("Content-Type", "application/json")
                     .addHeader("sandbox-key", API_KEY)
                     .addHeader("Authorization", "dskjdks")
@@ -52,6 +52,7 @@ object RetrofitClient {
 
 interface FlutterwaveApiService {
     @Headers(
+        "Connection: keep-alive",
         "Content-Type: application/json",
         "sandbox-key: $API_KEY",
         "Authorization: dskjdks"
