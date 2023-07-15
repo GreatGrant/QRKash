@@ -2,6 +2,7 @@ package com.gralliams.qrkash.api
 
 import com.gralliams.qrkash.BuildConfig
 import com.gralliams.qrkash.BuildConfig.API_KEY
+import com.gralliams.qrkash.constants.AUTHORIZATION
 import com.gralliams.qrkash.constants.BASE_URL
 import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.model.VirtualAccountResponse
@@ -18,10 +19,16 @@ object RetrofitClient {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("Connection", " keep-alive")
+                    .addHeader("Content-Type", "text/plain")
+                    .addHeader("Content-Length", "<calculated when request is sent>")
+                    .addHeader("Host", "<calculated when request is sent>")
+                    .addHeader("User-Agent", "PostmanRuntime/7.32.3")
+                    .addHeader("Accept", "*/*")
+                    .addHeader("Accept-Encoding", "gzip, deflate, br")
+                    .addHeader("Connection", "keep-alive")
                     .addHeader("Content-Type", "application/json")
                     .addHeader("sandbox-key", API_KEY)
-                    .addHeader("Authorization", "dskjdks")
+                    .addHeader("Authorization", AUTHORIZATION)
                     .build()
                 chain.proceed(request)
             }
@@ -52,10 +59,16 @@ object RetrofitClient {
 
 interface FlutterwaveApiService {
     @Headers(
+        "Content-Type: text/plain",
+        "Content-Length: <calculated when request is sent>",
+        "Host: <calculated when request is sent>",
+        "User-Agent: PostmanRuntime/7.32.3",
+        "Accept: */*",
+        "Accept-Encoding: gzip, deflate, br",
         "Connection: keep-alive",
         "Content-Type: application/json",
-        "sandbox-key: $API_KEY",
-        "Authorization: dskjdks"
+        "sandbox-key: $API_KEY}",
+        "Authorization: $AUTHORIZATION}"
     )
     @POST("flutterwave/v3/virtual-account-numbers")
     suspend fun createVirtualAccount(
