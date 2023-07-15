@@ -21,3 +21,15 @@ data class VirtualAccountData(
     @SerializedName("note") val note: String,
     @SerializedName("amount") val amount: Double?
 )
+
+data class VirtualAccountRequest(
+    val email: String,
+    val isPermanent: Boolean,
+    val bvn: String,
+    val txRef: String? = null,
+    val phoneNumber: String? = null,
+    val firstName: String,
+    val lastName: String,
+    val narration: String
+)
+

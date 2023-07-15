@@ -3,6 +3,7 @@ package com.gralliams.qrkash.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.model.VirtualAccountResponse
 import com.gralliams.qrkash.repository.VirtualAccountRepository
 import kotlinx.coroutines.launch
@@ -13,7 +14,7 @@ class VirtualAccountViewModel(private val repository: VirtualAccountRepository) 
     val virtualAccountResponse: MutableLiveData<VirtualAccountResponse> = MutableLiveData()
     val error: MutableLiveData<String> = MutableLiveData()
 
-    fun createVirtualAccount(requestBody: HashMap<String, Any>) {
+    fun createVirtualAccount(requestBody: VirtualAccountRequest) {
         viewModelScope.launch {
             try {
                 val response = repository.createVirtualAccount(requestBody)

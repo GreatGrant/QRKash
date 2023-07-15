@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.api.RetrofitClient
 import com.gralliams.qrkash.databinding.FragmentVirtualAccountBinding
+import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.repository.VirtualAccountRepository
 import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -39,15 +40,16 @@ class VirtualAccountFragment : Fragment() {
         val firstName = user?.displayName?.split(" ")?.get(0)
         val lastName = user?.displayName?.split(" ")?.get(1)
 
-        val requestBody = HashMap<String, Any>()
-        requestBody["email"] = email ?: ""
-        requestBody["is_permanent"] = true
-        requestBody["bvn"] = "12345678901"
-        requestBody["tx_ref"] = ""
-        requestBody["phonenumber"] = ""
-        requestBody["firstname"] = firstName ?: ""
-        requestBody["lastname"] = lastName ?: ""
-        requestBody["narration"] = "$firstName $lastName"
+        Toast.makeText(requireContext(), "$email $firstName $lastName", Toast.LENGTH_SHORT).show()
+
+        val requestBody = VirtualAccountRequest(
+            email = email ?: "",
+            isPermanent = true,
+            bvn = "22369861577",
+            firstName = firstName ?: "",
+            lastName = lastName ?: "",
+            narration = "$firstName $lastName"
+        )
 
         viewModel.createVirtualAccount(requestBody)
 
