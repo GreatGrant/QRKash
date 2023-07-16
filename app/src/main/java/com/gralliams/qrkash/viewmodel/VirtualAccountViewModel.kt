@@ -26,4 +26,17 @@ class VirtualAccountViewModel(private val repository: VirtualAccountRepository) 
             }
         }
     }
-}
+
+    fun getVirtualAccount(orderRef: String){
+        viewModelScope.launch {
+            try {
+                val response = repository.getVirtualAccount(orderRef)
+                virtualAccountResponse.value = response
+            } catch (e: IOException) {
+                error.value = "Network Error: Please check your internet connection."
+            } catch (e: Exception) {
+                error.value = "Error: ${e.message}. Please try again later."
+            }
+        }
+        }
+    }
