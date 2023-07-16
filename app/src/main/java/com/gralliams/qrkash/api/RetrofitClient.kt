@@ -12,8 +12,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
+
 object RetrofitClient {
 
     private val httpClient = OkHttpClient.Builder()
@@ -66,4 +69,19 @@ interface FlutterwaveApiService {
     suspend fun createVirtualAccount(
         @Body request: VirtualAccountRequest
     ): VirtualAccountResponse
+
+    @Headers(
+        "User-Agent: PostmanRuntime/7.32.3",
+        "Accept: */*",
+        "Accept-Encoding: gzip, deflate, br",
+        "Connection: keep-alive",
+        "Content-Type: application/json",
+        "sandbox-key: $API_KEY",
+        "Authorization: $AUTHORIZATION"
+    )
+    @GET("flutterwave/v3/virtual-account-numbers/{order_ref}")
+    suspend fun getVirtualAccount(
+        @Path("order_ref") orderRef: String
+    ): VirtualAccountResponse
+
 }

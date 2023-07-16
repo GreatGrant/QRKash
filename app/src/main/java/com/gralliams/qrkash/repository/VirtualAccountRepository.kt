@@ -8,5 +8,6 @@ class VirtualAccountRepository(private val apiService: FlutterwaveApiService) {
     suspend fun createVirtualAccount(requestBody: VirtualAccountRequest): VirtualAccountResponse {
         return apiService.createVirtualAccount(requestBody)
     }
+  
 }
 
