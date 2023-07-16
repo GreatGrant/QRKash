@@ -10,7 +10,7 @@ class VirtualAccountRepository(private val apiService: FlutterwaveApiService) {
     }
 
     suspend fun getVirtualAccount(orderRef: String): VirtualAccountResponse{
-        return apiService.getVirtualAccount(orderRef)
+        return apiService.getVirtualAccount(orderRef, orderRef)
     }
 }
 

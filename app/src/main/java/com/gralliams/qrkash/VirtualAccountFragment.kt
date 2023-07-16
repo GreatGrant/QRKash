@@ -65,7 +65,7 @@ class VirtualAccountFragment : Fragment() {
 
                 viewModel.getVirtualAccount(orderRef)
                 // Update UI with the retrieved data
-                binding.textView3.text = "$note $bankName $accountNumber"
+                binding.textView3.text = "${accountResponse.message} $note $bankName $accountNumber"
 //                    getString(R.string.virtual_account_statement)
             }
         }
