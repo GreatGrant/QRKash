@@ -54,17 +54,23 @@ class VirtualAccountFragment : Fragment() {
         )
 
         viewModel.createVirtualAccount(requestBody)
+//        viewModel.getVirtualAccount("URF_1613406439309_370935")
 
         viewModel.virtualAccountResponse.observe(viewLifecycleOwner) { response ->
             response?.let { accountResponse ->
                 val note = accountResponse.data.note
                 val bankName = accountResponse.data.bankName
                 val accountNumber = accountResponse.data.accountNumber
+                val orderRef = accountResponse.data.orderRef
+
+                viewModel.getVirtualAccount(orderRef)
                 // Update UI with the retrieved data
-                binding.textView3.text = accountResponse.message
+                binding.textView3.text = "$note $bankName $accountNumber"
 //                    getString(R.string.virtual_account_statement)
             }
         }
+
+
 
         viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
