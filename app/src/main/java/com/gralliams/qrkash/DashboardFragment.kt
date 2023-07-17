@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gralliams.qrkash.databinding.FragmentDashBoardBinding
 
 class DashboardFragment : Fragment() {
@@ -26,6 +28,9 @@ class DashboardFragment : Fragment() {
         if (displayName != null) {
             // Display the user's name
             username.text = displayName
+            // Retrieve the user ID
+            val userId: String = currentUser.uid
+            updateWallet(userId)
         } else {
             // Handle the case where the display name is not available
             username.text = "User"
@@ -35,7 +40,12 @@ class DashboardFragment : Fragment() {
             showTopupOptionsDialog()
         }
 
+
         return binding.root
+    }
+
+    private fun updateWallet(userId: String) {
+
     }
 
     private fun showTopupOptionsDialog() {
@@ -57,5 +67,7 @@ class DashboardFragment : Fragment() {
             }
             .show()
     }
+
+    
 
 }

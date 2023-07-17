@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.gralliams.qrkash.databinding.FragmentSignupBinding
 
 class SignupFragment : Fragment() {
@@ -92,7 +93,13 @@ class SignupFragment : Fragment() {
                     // Registration success, user account created
                     Toast.makeText(context, "Registration Succesful", Toast.LENGTH_SHORT).show()
                     val user = task.result?.user
+                    val currentUser = FirebaseAuth.getInstance().currentUser
 
+                    if (currentUser != null) {
+                        // Retrieve the user ID
+                        val userId: String = currentUser.uid
+                        createWallet(userId)
+                    }
                     // Update the user's display name with the full name
                     val profileUpdates = UserProfileChangeRequest.Builder()
                         .setDisplayName(fullName)
@@ -122,5 +129,36 @@ class SignupFragment : Fragment() {
             }
 
     }
+
+    private fun createWallet(userId: String) {
+
+        val db = FirebaseFirestore.getInstance()
+        val walletsCollection = db.collection("wallets")
+
+// Create a new wallet document
+        val walletData = hashMapOf(
+            "userId" to userId,
+            "balance" to 0, // Set initial balance to 0
+            "transactionHistory" to arrayListOf<String>() // Initialize an empty transaction history array
+        )
+
+// Add the wallet document to the "wallets" collection
+        walletsCollection.document(userId)
+            .set(walletData)
+            .addOnSuccessListener {
+                // Wallet creation successful
+                // Perform any additional actions or show a success message
+                Toast.makeText(requireContext(), "Wallet successfully creeated", Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener { e ->
+                // Handle wallet creation failure
+                // Display an error message or retry the operation
+                Toast.makeText(requireContext(), "Wallet successfully failed $e", Toast.LENGTH_LONG).show()
+
+            }
+
+    }
+
+
 
 }
