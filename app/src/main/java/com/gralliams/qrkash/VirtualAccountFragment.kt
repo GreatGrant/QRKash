@@ -63,12 +63,23 @@ class VirtualAccountFragment : Fragment() {
                 val note = accountResponse.data.note
                 val bankName = accountResponse.data.bankName
                 val accountNumber = accountResponse.data.accountNumber
+                val amount = accountResponse.data.amount
                 val orderRef = accountResponse.data.orderRef
+                // Extract user's name from note
+                val accountName = note.substringAfter("to ")
+
 
                 viewModel.getVirtualAccount(orderRef)
                 // Update UI with the retrieved data
-                binding.tvStatement.text = "${accountResponse.message} $note $bankName $accountNumber \n This works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
-                binding.textView3.text = "Since we are working with a test API, click the button below to simulate a tranfer to the account number generated."
+                binding.progressBar.visibility = View.GONE
+                binding.apply {
+                    tvStatement.text = "${accountResponse.message} $note $bankName $accountNumber \nThis works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
+                    tvStatement2.text = " \nSince we are working with a test API, click the button below to simulate a transfer to the account number generated with a desired amount."
+                    accountNumberEditText.setText(accountNumber)
+                    accountNameEditText.setText(accountName)
+                    bankEditText.setText(bankName)
+                    amountEditText.setText(amount.toString())
+                }
             }
         }
 
