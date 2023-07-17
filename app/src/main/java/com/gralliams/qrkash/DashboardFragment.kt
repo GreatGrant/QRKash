@@ -28,6 +28,7 @@ class DashboardFragment : Fragment() {
         }
 
         viewModel.balance.observe(viewLifecycleOwner){balance ->
+            binding.tvBalanceAmount.visibility = View.VISIBLE
             binding.tvBalanceAmount.text = "₦$balance"
         }
 

@@ -77,6 +77,7 @@
             app:layout_constraintTop_toBottomOf="@+id/ivAvatar" />
 
         <!-- Balance Amount Text -->
+
         <TextView
             android:id="@+id/tvBalanceAmount"
             android:layout_width="wrap_content"
@@ -84,6 +85,7 @@
             android:layout_marginTop="4dp"
             android:text="₦0.00"
             android:textSize="34sp"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.484"
             app:layout_constraintStart_toEndOf="@+id/tvHelloUser"
