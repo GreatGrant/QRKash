@@ -67,7 +67,8 @@ class VirtualAccountFragment : Fragment() {
 
                 viewModel.getVirtualAccount(orderRef)
                 // Update UI with the retrieved data
-                binding.textView3.text = "${accountResponse.message} $note $bankName $accountNumber"
+                binding.tvStatement.text = "${accountResponse.message} $note $bankName $accountNumber \n This works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
+                binding.textView3.text = "Since we are working with a test API, click the button below to simulate a tranfer to the account number generated."
             }
         }
 
