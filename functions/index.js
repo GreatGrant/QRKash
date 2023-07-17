@@ -1,5 +1,8 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+admin.initializeApp();
+const db = admin.firestore();
+
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
@@ -24,7 +27,7 @@ exports.flutterwaveWebhook = functions.https.onRequest(async (req, res) => {
     const accountId = eventData.account_id;
 
     // Get the user's wallet document
-    const walletDoc = await admin.firestore().collection('wallets').doc(accountId).get();
+    const walletDoc = await db.collection('wallets').doc(accountId).get();
     if (!walletDoc.exists) {
       console.error('Wallet document not found');
       return res.status(404).end();

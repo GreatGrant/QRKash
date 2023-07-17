@@ -35,6 +35,8 @@ class VirtualAccountFragment : Fragment() {
         val repository = VirtualAccountRepository(apiService)
         viewModel = ViewModelProvider(this, VirtualAccountViewModelFactory(repository))[VirtualAccountViewModel::class.java]
 
+        val progressBar = binding.progressBar
+        progressBar.visibility = View.VISIBLE // Show the progress bar
 
         val firebaseAuth = FirebaseAuth.getInstance()
         val user = firebaseAuth.currentUser
@@ -54,10 +56,10 @@ class VirtualAccountFragment : Fragment() {
         )
 
         viewModel.createVirtualAccount(requestBody)
-//        viewModel.getVirtualAccount("URF_1613406439309_370935")
 
         viewModel.virtualAccountResponse.observe(viewLifecycleOwner) { response ->
             response?.let { accountResponse ->
+                progressBar.visibility = View.GONE // Hide the progress bar
                 val note = accountResponse.data.note
                 val bankName = accountResponse.data.bankName
                 val accountNumber = accountResponse.data.accountNumber
@@ -66,13 +68,11 @@ class VirtualAccountFragment : Fragment() {
                 viewModel.getVirtualAccount(orderRef)
                 // Update UI with the retrieved data
                 binding.textView3.text = "${accountResponse.message} $note $bankName $accountNumber"
-//                    getString(R.string.virtual_account_statement)
             }
         }
 
-
-
         viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            progressBar.visibility = View.GONE // Hide the progress bar
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         }
 
@@ -83,5 +83,4 @@ class VirtualAccountFragment : Fragment() {
         super.onDestroyView()
         viewModel.viewModelScope.cancel()
     }
-
 }
