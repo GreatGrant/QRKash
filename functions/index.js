@@ -1,82 +1,71 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const express = require('express');
-const app = express();
 
-// Initialize the Firebase Admin SDK
+// Initialize Firebase Admin SDK
 admin.initializeApp();
 
-app.use(express.json());
-
 // Define your webhook endpoint
-app.post('/webhook', (req, res) => {
-  const authToken = req.headers.authorization;
+exports.flutterwaveWebhook = functions.https.onRequest(async (req, res) => {
+//  try {
+//    // Validate the request
+//    const isValidRequest = validateRequest(req);
+//    if (!isValidRequest) {
+//      console.error('Invalid webhook request');
+//      return res.status(400).end();
+//    }
 
-  admin
-    .auth()
-    .verifyIdToken(authToken)
-    .then((decodedToken) => {
-      // Request is legitimate
-      const event = req.body;
-      handleWebhookEvent(event);
-      res.status(200).end();
-    })
-    .catch((error) => {
-      // Request is not legitimate
-      res.status(401).end();
+    // Parse the webhook payload
+    const webhookEvent = req.body;
+    const eventData = webhookEvent.data;
+
+    // Extract relevant information from the payload
+    const txRef = eventData.tx_ref;
+    const chargedAmount = eventData.charged_amount;
+    const accountId = eventData.account_id;
+
+    // Get the user's wallet document
+    const walletDoc = await admin.firestore().collection('wallets').doc(accountId).get();
+    if (!walletDoc.exists) {
+      console.error('Wallet document not found');
+      return res.status(404).end();
+    }
+
+    // Update the wallet balance
+    const walletData = walletDoc.data();
+    const currentBalance = walletData.balance;
+    const updatedBalance = currentBalance + chargedAmount;
+
+    // Update the wallet document in the database
+    await walletDoc.ref.update({ balance: updatedBalance });
+
+    // Log the transaction in the wallet's transaction history
+    const transactionHistoryRef = walletDoc.ref.collection('transactionHistory').doc();
+    await transactionHistoryRef.set({
+      txRef,
+      amount: chargedAmount,
+      timestamp: admin.firestore.FieldValue.serverTimestamp()
     });
+
+    // Return a success response
+    return res.status(200).end();
+  } catch (error) {
+    console.error('Webhook processing error:', error);
+    return res.status(500).end();
+  }
 });
 
-// Handle the webhook event
-function handleWebhookEvent(event) {
-  // Process the webhook event here
-  console.log('Received webhook event:', event);
-  // Add your custom logic to handle the event
-   const { event: eventType, data } = event;
-
-    switch (eventType) {
-      case 'charge.completed':
-        handleChargeCompletedEvent(data);
-        break;
-      case 'payment.failed':
-        handlePaymentFailedEvent(data);
-        break;
-      // Add more cases for other event types you want to handle
-      default:
-        console.log('Unsupported event type:', eventType);
-        break;
-    }
+// Validate the webhook request (example implementation, adjust to your needs)
+function validateRequest(req) {
+  const signature = req.headers['x-flutterwave-signature'];
+  const payload = req.rawBody;
+  // Verify the signature using your preferred method
+  // Return true if the signature is valid, false otherwise
+  return verifySignature(signature, payload);
 }
 
-async function handleChargeCompletedEvent(data) {
-  // Extract relevant data from the event payload
-  const { tx_ref, amount, currency, customer } = data;
-
-  try {
-    // Get a reference to the customer's document in your Firestore database
-    const customerRef = admin.firestore().collection('customers').doc(customer.id);
-
-    // Update the customer's wallet balance or payment status
-    await customerRef.update({
-      walletBalance: admin.firestore.FieldValue.increment(amount),
-      paymentStatus: 'completed',
-      lastPayment: {
-        amount,
-        currency,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      },
-    });
-
-    console.log('Charge completed event:', data);
-    console.log('Crediting customer wallet:', customer.email);
-    console.log('Amount:', amount, currency);
-  } catch (error) {
-    console.error('Error updating customer data:', error);
-  }
+// Example signature verification function (adjust to your needs)
+function verifySignature(signature, payload) {
+  // Implement the signature verification logic
+  // Return true if the signature is valid, false otherwise
+  return true;
 }
-
-
-
-// Export the Express app as a Cloud Function
-exports.webhookEndpoint = functions.https.onRequest(app);
-
