@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -30,7 +29,7 @@ class DashboardFragment : Fragment() {
             username.text = displayName
             // Retrieve the user ID
             val userId: String = currentUser.uid
-            updateWallet(userId)
+            retrieveWallet(userId)
         } else {
             // Handle the case where the display name is not available
             username.text = "User"
@@ -44,8 +43,27 @@ class DashboardFragment : Fragment() {
         return binding.root
     }
 
-    private fun updateWallet(userId: String) {
-
+    private fun retrieveWallet(userId: String) {
+        val db = FirebaseFirestore.getInstance()
+        val walletsCollection = db.collection("wallets")
+        // Retrieve the user's wallet document
+        walletsCollection.document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val wallet = document.data // Access the wallet data
+                    val balance = wallet?.get("balance") as Long // Retrieve the balance field
+                    val transactionHistory = wallet["transactionHistory"] as ArrayList<*> // Retrieve the transaction history
+                    // Perform further operations with the wallet data
+                    binding.tvBalanceAmount.text = balance.toString()
+                } else {
+                    // Handle case when the wallet document does not exist
+                }
+            }
+            .addOnFailureListener { e ->
+                // Handle wallet retrieval failure
+                // Display an error message or retry the operation
+            }
     }
 
     private fun showTopupOptionsDialog() {
