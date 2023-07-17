@@ -10,10 +10,13 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.api.RetrofitClient
+import com.gralliams.qrkash.databinding.BottomSheetLayoutBinding
 import com.gralliams.qrkash.databinding.FragmentVirtualAccountBinding
 import com.gralliams.qrkash.model.TransferRequest
+import com.gralliams.qrkash.model.TransferResponse
 import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.repository.VirtualAccountRepository
 import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
@@ -25,6 +28,7 @@ import kotlinx.coroutines.launch
 
 class VirtualAccountFragment : Fragment() {
     private lateinit var binding: FragmentVirtualAccountBinding
+    private lateinit var bottomsheetBinding: BottomSheetLayoutBinding
     private lateinit var viewModel: VirtualAccountViewModel
     private lateinit var progressBar: ProgressBar
     override fun onCreateView(
@@ -86,6 +90,7 @@ class VirtualAccountFragment : Fragment() {
                     accountNumberEditText.setText(accountNumber)
                     accountNameEditText.setText(accountName)
                     bankEditText.setText(bankName)
+                    amountEditText.setText("5500")
 
                     submitButton.setOnClickListener {
                         it.visibility = View.INVISIBLE
@@ -118,11 +123,24 @@ class VirtualAccountFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
         viewModel.createTransfer(transferRequest)
         viewModel.transferResponse.observe(viewLifecycleOwner){response->
-            response.let {
+            response?.let {
                 Toast.makeText(requireContext(), "${response.status} ${response.message}", Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
+                showBottomSheet(it)
             }
         }
+    }
+
+    private fun showBottomSheet(response: TransferResponse) {
+        val view = BottomSheetLayoutBinding.inflate(layoutInflater)
+
+        view.apply {
+         messageTextView.text = "Transaction with ref${response.data.reference} is successful. Check your wallet."
+        }
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(view.root)
+        dialog.show()
+
     }
 
     override fun onDestroyView() {
