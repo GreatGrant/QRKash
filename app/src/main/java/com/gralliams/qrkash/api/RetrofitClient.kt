@@ -5,6 +5,8 @@ import com.gralliams.qrkash.BuildConfig
 import com.gralliams.qrkash.BuildConfig.API_KEY
 import com.gralliams.qrkash.constants.AUTHORIZATION
 import com.gralliams.qrkash.constants.BASE_URL
+import com.gralliams.qrkash.model.TransferRequest
+import com.gralliams.qrkash.model.TransferResponse
 import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.model.VirtualAccountResponse
 import okhttp3.OkHttpClient
@@ -94,7 +96,7 @@ interface FlutterwaveApiService {
     )
     @POST("flutterwave/v3/transfers")
     suspend fun createTransfer(
-        @Body request: VirtualAccountRequest
-    ): VirtualAccountResponse
+        @Body request: TransferRequest
+    ): TransferResponse
 
 }
