@@ -29,11 +29,15 @@ class VirtualAccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_virtual_account, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_virtual_account, container, false)
 
         val apiService = RetrofitClient.apiService
         val repository = VirtualAccountRepository(apiService)
-        viewModel = ViewModelProvider(this, VirtualAccountViewModelFactory(repository))[VirtualAccountViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            VirtualAccountViewModelFactory(repository)
+        )[VirtualAccountViewModel::class.java]
 
         val progressBar = binding.progressBar
         progressBar.visibility = View.VISIBLE // Show the progress bar
@@ -73,12 +77,17 @@ class VirtualAccountFragment : Fragment() {
                 // Update UI with the retrieved data
                 binding.progressBar.visibility = View.GONE
                 binding.apply {
-                    tvStatement.text = "${accountResponse.message} $note $bankName $accountNumber \nThis works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
-                    tvStatement2.text = " \nSince we are working with a test API, click the button below to simulate a transfer to the account number generated with a desired amount."
+                    tvStatement.text =
+                        "${accountResponse.message} $note $bankName $accountNumber \nThis works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
+                    tvStatement2.text =
+                        " \nSince we are working with a test API, click the button below to simulate a transfer to the account number generated with a desired amount."
                     accountNumberEditText.setText(accountNumber)
                     accountNameEditText.setText(accountName)
                     bankEditText.setText(bankName)
                     amountEditText.setText(amount.toString())
+                    submitButton.setOnClickListener {
+                        topUpWallet()
+                    }
                 }
             }
         }
@@ -89,6 +98,10 @@ class VirtualAccountFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun topUpWallet() {
+
     }
 
     override fun onDestroyView() {

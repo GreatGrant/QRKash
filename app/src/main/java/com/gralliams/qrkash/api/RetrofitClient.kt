@@ -86,4 +86,15 @@ interface FlutterwaveApiService {
         @Query("order_ref") queryOrderRef: String
     ): VirtualAccountResponse
 
+
+    @Headers(
+        "Content-Type: application/json",
+        "sandbox-key: $API_KEY",
+        "Authorization: $AUTHORIZATION"
+    )
+    @POST("flutterwave/v3/transfers")
+    suspend fun createTransfer(
+        @Body request: VirtualAccountRequest
+    ): VirtualAccountResponse
+
 }
