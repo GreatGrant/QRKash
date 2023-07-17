@@ -7,8 +7,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class DashboardViewModel : ViewModel() {
-    private val _userName = MutableLiveData<String>()
-    val userName: LiveData<String>
+    private val _userName = MutableLiveData<String?>()
+    val userName: MutableLiveData<String?>
         get() = _userName
 
     private val _balance = MutableLiveData<Long>()
