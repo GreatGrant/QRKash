@@ -36,7 +36,7 @@ class SplashFragment : Fragment() {
         // Use a handler to post a delayed action to open the main activity after the splash screen duration
         Handler(Looper.getMainLooper()).postDelayed({
             findNavController().navigate(R.id.action_splashFragment_to_welcomeFragment)
-        }, 3000)
+        }, 1000)
 
         return binding.root
     }
