@@ -5,23 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.gralliams.qrkash.databinding.BottomSheetLayoutBinding
 import com.gralliams.qrkash.databinding.FragmentTransferBinding
-import com.gralliams.qrkash.model.TransferResponse
-import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
+import com.gralliams.qrkash.viewmodel.WalletViewModel
 
 class TransferFragment : Fragment() {
     private lateinit var binding: FragmentTransferBinding
-    private val sharedViewModel: ScannedSharedViewModel by viewModels()
-
+    private val walletViewModel: WalletViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,28 +31,33 @@ class TransferFragment : Fragment() {
 
     }
 
-    private fun decryptQR(stringToDecrpt: String?) {
+    private fun decryptQR(stringToDecrypt: String?) {
 
-// Define the regex patterns to match the recipient, amount, account, and bank
-        val recipientPattern = "Recipient: (.*?),".toRegex()
-        val amountPattern = "amount: \\$(.*?),".toRegex()
-        val accountPattern = "account: (.*?),".toRegex()
-        val emailPattern = "email: (.*?),".toRegex()
-        val bankPattern = "bank: (.*?)$".toRegex()
+// Extracting recipient
+        val recipientRegex = Regex("Recipient:\\s(.*?),")
+        val recipientMatch = stringToDecrypt?.let { recipientRegex.find(it) }
+        val recipient = recipientMatch?.groupValues?.get(1)?.trim() ?: ""
 
-// Use the find method to extract the information using the regex patterns
-        val recipientMatch = stringToDecrpt?.let { recipientPattern.find(it) }
-        val amountMatch = stringToDecrpt?.let { amountPattern.find(it) }
-        val accountMatch = stringToDecrpt?.let { accountPattern.find(it) }
-        val emailMatch = stringToDecrpt?.let { accountPattern.find(it) }
-        val bankMatch = stringToDecrpt?.let { bankPattern.find(it) }
+// Extracting amount
+        val amountRegex = Regex("amount:\\s(.*?),")
+        val amountMatch = stringToDecrypt?.let { amountRegex.find(it) }
+        val amount = amountMatch?.groupValues?.get(1)?.trim() ?: ""
 
-// Extract the matched values
-        val recipient = recipientMatch?.groupValues?.getOrNull(1) ?: ""
-        val amount = amountMatch?.groupValues?.getOrNull(1) ?: ""
-        val account = accountMatch?.groupValues?.getOrNull(1) ?: ""
-        val email = emailMatch?.groupValues?.getOrNull(1) ?: ""
-        val bank = bankMatch?.groupValues?.getOrNull(1) ?: ""
+// Extracting email
+        val emailRegex = Regex("email:\\s(.*?),")
+        val emailMatch = stringToDecrypt?.let { emailRegex.find(it) }
+        val email = emailMatch?.groupValues?.get(1)?.trim() ?: ""
+
+//         Extracting account
+        val accountRegex = Regex("account:\\s(.*?),")
+        val accountMatch = stringToDecrypt?.let { accountRegex.find(it) }
+        val account = accountMatch?.groupValues?.get(1)?.trim() ?: ""
+
+// Extracting bank
+        val bankRegex = Regex("bank:\\s(.*)")
+        val bankMatch = stringToDecrypt?.let { bankRegex.find(it) }
+        val bank = bankMatch?.groupValues?.get(1)?.trim() ?: ""
+
 
 // use the extracted information as needed
         binding.apply {
@@ -65,7 +65,7 @@ class TransferFragment : Fragment() {
             etAmount.setText(amount)
             etAccountNumber.setText(account)
             etBank.setText(bank)
-            etEmail.setText(bank)
+            etEmail.setText(email)
             btnSend.setOnClickListener {
                 val isAmountValid = validateField(etAmount , tilAmount, "Enter an amount")
                 val isAccountValid = validateField(etAccountNumber , tilAccountNumber, "Enter account number")
@@ -78,6 +78,7 @@ class TransferFragment : Fragment() {
                     it.visibility = View.INVISIBLE
                 }
 
+                walletViewModel.updateBalance(amount.toInt())
                 showBottomSheet(recipient, amount, account, bank)
             }
         }
@@ -91,7 +92,10 @@ class TransferFragment : Fragment() {
         dialog.show()
 
         view.apply {
-            messageTextView.text = "Transaction ref: 363378911df712.\nAmount: $amount\nRecipient: $recipient\nBank: $bank\nStatus: Success"
+            walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
+                messageTextView.text = "Transaction ref: 363378911df712.\nAmount: $amount\nRecipient: $recipient\nBank: $bank\nStatus: Success\nBalance: $balance"
+            }
+
 
             closeButton.setOnClickListener {
                 // Dismiss the dialog

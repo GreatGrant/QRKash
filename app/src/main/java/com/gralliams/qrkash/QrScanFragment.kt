@@ -48,7 +48,6 @@ class QrScanFragment : Fragment() {
         qrCodeViewModel = ViewModelProvider(requireActivity())[QRCodeViewModel::class.java]
 
         qrCodeViewModel.scannedText.observe(viewLifecycleOwner){ scannedText ->
-            sharedViewModel.setScannedData(scannedText)
             Toast.makeText(requireContext(), "$scannedText", Toast.LENGTH_SHORT).show()
             val action = QrScanFragmentDirections.actionQrScanFragmentToTransferFragment(scannedText)
             findNavController().navigate(action)
