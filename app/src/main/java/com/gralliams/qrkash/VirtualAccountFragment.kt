@@ -31,6 +31,8 @@ class VirtualAccountFragment : Fragment() {
     private lateinit var bottomsheetBinding: BottomSheetLayoutBinding
     private lateinit var viewModel: VirtualAccountViewModel
     private lateinit var progressBar: ProgressBar
+    private lateinit var walletViewModel: WalletViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -133,7 +135,7 @@ class VirtualAccountFragment : Fragment() {
     }
 
     private fun sendWebhook(response: TransferResponse) {
-
+        walletViewModel.incrementBalance(response.data.amount)
     }
 
     private fun showBottomSheet(response: TransferResponse) {

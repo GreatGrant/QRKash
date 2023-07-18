@@ -10,10 +10,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.gralliams.qrkash.databinding.FragmentDashBoardBinding
 import com.gralliams.qrkash.viewmodel.DashboardViewModel
+import com.gralliams.qrkash.viewmodel.WalletViewModel
 
 class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashBoardBinding
     private lateinit var viewModel: DashboardViewModel
+    private lateinit var walletViewModel: WalletViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,13 +23,19 @@ class DashboardFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dash_board, container, false)
         viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+        walletViewModel = ViewModelProvider(this)[WalletViewModel::class.java]
 
 
         binding.btnTopup.setOnClickListener {
             showTopupOptionsDialog()
         }
 
-        viewModel.balance.observe(viewLifecycleOwner){balance ->
+//        viewModel.balance.observe(viewLifecycleOwner){balance ->
+//            binding.tvBalanceAmount.visibility = View.VISIBLE
+//            binding.tvBalanceAmount.text = "₦$balance"
+//        }
+//
+        walletViewModel.walletBalance.observe(viewLifecycleOwner){balance ->
             binding.tvBalanceAmount.visibility = View.VISIBLE
             binding.tvBalanceAmount.text = "₦$balance"
         }
