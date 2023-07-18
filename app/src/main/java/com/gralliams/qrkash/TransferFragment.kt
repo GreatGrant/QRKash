@@ -74,11 +74,21 @@ class TransferFragment : Fragment() {
 
                 if (!isAmountValid || !isRecipientValid || !isBankValid || !isAccountValid) {
                     return@setOnClickListener
-                } else {
-                    it.visibility = View.INVISIBLE
                 }
 
-                walletViewModel.updateBalance(amount.toInt())
+                val currentBalance = walletViewModel.balanceLiveData.value ?: 0
+                val enteredAmount = etAmount.text.toString().toInt()
+
+                if (enteredAmount > currentBalance) {
+                    tilAmount.error = "Insufficient balance: You cannot withdraw more than your balance ₦$currentBalance"
+                    return@setOnClickListener
+                } else {
+                    tilAmount.error = null
+                }
+
+                val newBalance = currentBalance - enteredAmount
+                walletViewModel.updateBalance(newBalance)
+
                 showBottomSheet(recipient, amount, account, bank)
             }
         }
