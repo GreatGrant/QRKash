@@ -19,7 +19,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     val isBalanceSufficient: LiveData<Boolean> get() = _isBalanceSufficient
 
     init {
-        _walletBalance.value = sharedPreferences.getFloat(walletBalanceKey, 100.0f).toDouble()
+        _walletBalance.value = sharedPreferences.getFloat(walletBalanceKey, 0.0f).toDouble()
         _isBalanceSufficient.value = true // Assume sufficient balance initially
     }
 
@@ -34,7 +34,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun incrementBalance(amount: Double) {
+    fun incrementBalance(amount: Int) {
         val currentBalance = _walletBalance.value ?: 0.0
         _walletBalance.value = currentBalance + amount
         saveBalanceToSharedPreferences()

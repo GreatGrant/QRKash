@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.databinding.FragmentDashBoardBinding
 import com.gralliams.qrkash.viewmodel.DashboardViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
@@ -25,6 +26,20 @@ class DashboardFragment : Fragment() {
         viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
         walletViewModel = ViewModelProvider(this)[WalletViewModel::class.java]
 
+        val username = binding.tvUserName
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val displayName = currentUser?.displayName
+        viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+
+        if (displayName != null) {
+            // Display the user's name
+            username.text = displayName
+            // Retrieve the user ID
+            val userId: String = currentUser.uid
+        } else {
+            // Handle the case where the display name is not available
+            username.text = "User"
+        }
 
         binding.btnTopup.setOnClickListener {
             showTopupOptionsDialog()

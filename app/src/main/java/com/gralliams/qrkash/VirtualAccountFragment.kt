@@ -20,6 +20,7 @@ import com.gralliams.qrkash.model.TransferResponse
 import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.repository.VirtualAccountRepository
 import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
+import com.gralliams.qrkash.viewmodel.WalletViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
