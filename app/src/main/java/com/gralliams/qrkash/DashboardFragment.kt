@@ -1,4 +1,5 @@
 package com.gralliams.qrkash
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,11 @@ import com.gralliams.qrkash.databinding.FragmentDashBoardBinding
 import com.gralliams.qrkash.viewmodel.DashboardViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
 
+
 class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashBoardBinding
     private lateinit var viewModel: DashboardViewModel
-    private val walletViewModel: WalletViewModel by activityViewModels()
+    private lateinit var walletViewModel: WalletViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,10 +58,12 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        walletViewModel = ViewModelProvider(this)[WalletViewModel::class.java]
+
 
         walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
             binding.tvBalanceAmount.visibility = View.VISIBLE
-            binding.tvBalanceAmount.text = "₦$balance"
+            binding.tvBalanceAmount.text = "₦${balance}"
         }
     }
 

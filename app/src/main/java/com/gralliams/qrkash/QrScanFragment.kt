@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class QrScanFragment : Fragment() {
-    private val sharedViewModel: ScannedSharedViewModel by viewModels()
+    private lateinit var sharedViewModel: ScannedSharedViewModel
     private lateinit var binding: FragmentQrScanBinding
     private lateinit var qrCodeViewModel: QRCodeViewModel
     private lateinit var cameraExecutor: ExecutorService
@@ -46,13 +46,16 @@ class QrScanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         qrCodeViewModel = ViewModelProvider(requireActivity())[QRCodeViewModel::class.java]
+        sharedViewModel = ViewModelProvider(requireActivity())[ScannedSharedViewModel::class.java]
 
         qrCodeViewModel.scannedText.observe(viewLifecycleOwner){ scannedText ->
-            Toast.makeText(requireContext(), "$scannedText", Toast.LENGTH_SHORT).show()
-            val action = QrScanFragmentDirections.actionQrScanFragmentToTransferFragment(scannedText)
-            findNavController().navigate(action)
+            sharedViewModel.setScannedData(scannedText)
 
-//            findNavController().navigate(R.id.action_qrScanFragment_to_transferFragment)
+//            Toast.makeText(requireContext(), "$scannedText", Toast.LENGTH_SHORT).show()
+//            val action = QrScanFragmentDirections.actionQrScanFragmentToTransferFragment(scannedText)
+//            findNavController().navigate(action)
+
+            findNavController().navigate(R.id.action_qrScanFragment_to_transferFragment)
         }
         // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
