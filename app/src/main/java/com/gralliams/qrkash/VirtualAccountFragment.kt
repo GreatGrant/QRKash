@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -29,27 +30,17 @@ import kotlinx.coroutines.launch
 
 class VirtualAccountFragment : Fragment() {
     private lateinit var binding: FragmentVirtualAccountBinding
-    private lateinit var bottomsheetBinding: BottomSheetLayoutBinding
-    private lateinit var viewModel: VirtualAccountViewModel
     private lateinit var progressBar: ProgressBar
-    private lateinit var walletViewModel: WalletViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_virtual_account, container, false)
-
-        val apiService = RetrofitClient.apiService
-        val repository = VirtualAccountRepository(apiService)
-        viewModel = ViewModelProvider(
+    private val viewModel: VirtualAccountViewModel by lazy {
+        ViewModelProvider(
             this,
-            VirtualAccountViewModelFactory(repository)
-        )[VirtualAccountViewModel::class.java]
+            VirtualAccountViewModelFactory(VirtualAccountRepository(RetrofitClient.apiService))
+        ).get(VirtualAccountViewModel::class.java)
+    }
+    private val walletViewModel: WalletViewModel by activityViewModels()
 
-        progressBar = binding.progressBar
-        progressBar.visibility = View.VISIBLE // Show the progress bar
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         val firebaseAuth = FirebaseAuth.getInstance()
         val user = firebaseAuth.currentUser
@@ -71,7 +62,7 @@ class VirtualAccountFragment : Fragment() {
         viewModel.createVirtualAccount(requestBody)
 //        viewModel.getVirtualAccount("RND_2641579516055928")
 
-        viewModel.virtualAccountResponse.observe(viewLifecycleOwner) { response ->
+        viewModel.virtualAccountResponse.observe(this) { response ->
             response?.let { accountResponse ->
                 progressBar.visibility = View.GONE // Hide the progress bar
                 val note = accountResponse.data.note
@@ -82,7 +73,6 @@ class VirtualAccountFragment : Fragment() {
                 // Extract user's name from note
                 val accountName = note.substringAfter("to ")
 
-
                 // Update UI with the retrieved data
                 binding.progressBar.visibility = View.GONE
                 binding.apply {
@@ -91,14 +81,14 @@ class VirtualAccountFragment : Fragment() {
                     tvStatement2.text =
                         " \nSince we are working with a test API, click the button below to simulate a bank transfer to the account number generated with a desired amount."
                     accountNumberEditText.setText(accountNumber)
-                    accountNameEditText.setText(accountName)
                     bankEditText.setText(bankName)
                     amountEditText.setText("5500")
 
                     submitButton.setOnClickListener {
                         it.visibility = View.INVISIBLE
                         val transferRequestBody =
-                            TransferRequest(accountBank = bankEditText.text.toString(),
+                            TransferRequest(
+                                accountBank = bankEditText.text.toString(),
                                 accountNumber = accountNumberEditText.text.toString(),
                                 amount = amountEditText.text.toString().toInt(),
                                 narration = narrationEditText.text.toString(),
@@ -106,7 +96,7 @@ class VirtualAccountFragment : Fragment() {
                                 reference = "",
                                 callbackUrl = "",
                                 debitCurrency = "NGN"
-                        )
+                            )
 
                         topUpWallet(transferRequestBody)
                     }
@@ -114,10 +104,21 @@ class VirtualAccountFragment : Fragment() {
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+        viewModel.error.observe(this) { errorMessage ->
             progressBar.visibility = View.GONE // Hide the progress bar
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_virtual_account, container, false)
+
+        progressBar = binding.progressBar
+        progressBar.visibility = View.VISIBLE // Show the progress bar
 
         return binding.root
     }
@@ -125,9 +126,13 @@ class VirtualAccountFragment : Fragment() {
     private fun topUpWallet(transferRequest: TransferRequest) {
         progressBar.visibility = View.VISIBLE
         viewModel.createTransfer(transferRequest)
-        viewModel.transferResponse.observe(viewLifecycleOwner){response->
+        viewModel.transferResponse.observe(this) { response ->
             response?.let {
-                Toast.makeText(requireContext(), "${response.status} ${response.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "${response.status} ${response.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 progressBar.visibility = View.GONE
                 showBottomSheet(it)
                 sendWebhook(it)
@@ -136,7 +141,9 @@ class VirtualAccountFragment : Fragment() {
     }
 
     private fun sendWebhook(response: TransferResponse) {
-        walletViewModel.incrementBalance(response.data.amount)
+        val currentBalance = walletViewModel.balanceLiveData.value ?: 0
+        val newBalance = currentBalance + response.data.amount
+        walletViewModel.updateBalance(newBalance)
     }
 
     private fun showBottomSheet(response: TransferResponse) {
@@ -146,19 +153,12 @@ class VirtualAccountFragment : Fragment() {
         dialog.show()
 
         view.apply {
-         messageTextView.text = "Transaction with ref${response.data.reference} is successful. Check your wallet."
+            messageTextView.text = "Transaction with ref${response.data.reference} is successful. Check your wallet."
 
             closeButton.setOnClickListener {
                 // Dismiss the dialog
                 dialog.dismiss()
             }
         }
-
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.viewModelScope.cancel()
     }
 }

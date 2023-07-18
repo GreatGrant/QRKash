@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,20 +17,19 @@ import com.gralliams.qrkash.viewmodel.WalletViewModel
 class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashBoardBinding
     private lateinit var viewModel: DashboardViewModel
-    private lateinit var walletViewModel: WalletViewModel
+    private val walletViewModel: WalletViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dash_board, container, false)
+
         viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
-        walletViewModel = ViewModelProvider(this)[WalletViewModel::class.java]
 
         val username = binding.tvUserName
         val currentUser = FirebaseAuth.getInstance().currentUser
         val displayName = currentUser?.displayName
-        viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
 
         if (displayName != null) {
             // Display the user's name
@@ -45,18 +45,16 @@ class DashboardFragment : Fragment() {
             showTopupOptionsDialog()
         }
 
-//        viewModel.balance.observe(viewLifecycleOwner){balance ->
-//            binding.tvBalanceAmount.visibility = View.VISIBLE
-//            binding.tvBalanceAmount.text = "₦$balance"
-//        }
-//
-        walletViewModel.walletBalance.observe(viewLifecycleOwner){balance ->
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
             binding.tvBalanceAmount.visibility = View.VISIBLE
             binding.tvBalanceAmount.text = "₦$balance"
         }
-
-
-        return binding.root
     }
 
     private fun showTopupOptionsDialog() {
