@@ -79,6 +79,7 @@ class TransferFragment : Fragment() {
                 val currentBalance = walletViewModel.balanceLiveData.value ?: 0
                 val enteredAmount = etAmount.text.toString().toInt()
 
+                tvWalletBalance.text = "₦$currentBalance"
                 if (enteredAmount > currentBalance) {
                     tilAmount.error = "Insufficient balance: You cannot withdraw more than your balance ₦$currentBalance"
                     return@setOnClickListener
