@@ -39,7 +39,7 @@ class QrGenerateFragment : Fragment() {
             val amount = binding.etAmount.text.toString()
             val recipient = FirebaseAuth.getInstance().currentUser?.displayName
 
-            val stringToEncrypt = "Recipient: $recipient, amount: $amount, account: 7824822527 , bank: WEMA BANK"
+            val stringToEncrypt = "Recipient: $recipient, amount: $amount, account: 7824822527, email: ${FirebaseAuth.getInstance().currentUser?.email}, bank: WEMA BANK"
 
             viewModel.generateQRCode(stringToEncrypt)
         }

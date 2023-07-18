@@ -149,11 +149,6 @@ class VirtualAccountFragment : Fragment() {
         viewModel.createTransfer(transferRequest)
         viewModel.transferResponse.observe(this) { response ->
             response?.let {
-                Toast.makeText(
-                    requireContext(),
-                    "${response.status} ${response.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
                 sendWebhook(transferRequest)
                 progressBar.visibility = View.GONE
                 showBottomSheet(it)
