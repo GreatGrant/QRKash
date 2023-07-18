@@ -127,19 +127,30 @@ class VirtualAccountFragment : Fragment() {
                 Toast.makeText(requireContext(), "${response.status} ${response.message}", Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
                 showBottomSheet(it)
+                sendWebhook(it)
             }
         }
     }
 
+    private fun sendWebhook(response: TransferResponse) {
+
+    }
+
     private fun showBottomSheet(response: TransferResponse) {
         val view = BottomSheetLayoutBinding.inflate(layoutInflater)
-
-        view.apply {
-         messageTextView.text = "Transaction with ref${response.data.reference} is successful. Check your wallet."
-        }
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(view.root)
         dialog.show()
+
+        view.apply {
+         messageTextView.text = "Transaction with ref${response.data.reference} is successful. Check your wallet."
+
+            closeButton.setOnClickListener {
+                // Dismiss the dialog
+                dialog.dismiss()
+            }
+        }
+
 
     }
 
