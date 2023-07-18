@@ -1,4 +1,5 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,15 +45,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
-            android:hint="Amount ₦"
             android:background="#018BD3"
+            android:hint="Amount ₦"
             android:textColorHint="#FFFFFF"
-            app:placeholderTextColor="@color/white"
             app:hintTextColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2">
+            app:layout_constraintTop_toBottomOf="@+id/cardView2"
+            app:placeholderTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAmount"
@@ -60,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
                 android:inputType="number"
-                android:maxLines="1"/>
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -76,6 +77,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="87dp"
+            android:text="Enter the amount you want to receive, click the button above to generate a QR code.\nYou can  scan the generated code using the recipient's QRKash app.\nYour wallet will be topped once the user make's the transfer."
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/generate_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
