@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.gralliams.qrkash.databinding.FragmentQrScanBinding
 import com.gralliams.qrkash.viewmodel.QRCodeViewModel
 import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
@@ -48,7 +49,7 @@ class QrScanFragment : Fragment() {
 
         qrCodeViewModel.scannedText.observe(viewLifecycleOwner){ scannedText ->
             sharedViewModel.setScannedData(scannedText)
-
+            findNavController().navigate(R.id.action_qrScanFragment_to_transferFragment)
         }
         // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
