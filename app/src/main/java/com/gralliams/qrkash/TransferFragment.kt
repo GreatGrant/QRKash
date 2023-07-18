@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.viewModels
@@ -36,9 +37,8 @@ class TransferFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transfer, container, false)
 
         sharedViewModel.scannedData.observe(viewLifecycleOwner) { scannedData ->
-            binding.apply {
+         Toast.makeText(requireContext(), "$scannedData", Toast.LENGTH_SHORT).show()
                 decryptQR(scannedData)
-            }
         }
         return binding.root
 
