@@ -88,5 +88,9 @@
         android:id="@+id/transferFragment"
         tools:layout="@layout/fragment_transfer"
         android:name="com.gralliams.qrkash.TransferFragment"
-        android:label="TransferFragment" />
+        android:label="TransferFragment" >
+        <argument
+            android:name="qrResult"
+            app:argType="string" />
+    </fragment>
 </navigation>

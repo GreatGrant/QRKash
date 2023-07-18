@@ -50,7 +50,10 @@ class QrScanFragment : Fragment() {
         qrCodeViewModel.scannedText.observe(viewLifecycleOwner){ scannedText ->
             sharedViewModel.setScannedData(scannedText)
             Toast.makeText(requireContext(), "$scannedText", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_qrScanFragment_to_transferFragment)
+            val action = QrScanFragmentDirections.actionQrScanFragmentToTransferFragment(scannedText)
+            findNavController().navigate(action)
+
+//            findNavController().navigate(R.id.action_qrScanFragment_to_transferFragment)
         }
         // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()

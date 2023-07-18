@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.gralliams.qrkash.databinding.BottomSheetLayoutBinding
 import com.gralliams.qrkash.databinding.FragmentTransferBinding
@@ -36,10 +37,9 @@ class TransferFragment : Fragment() {
         // Inflate the
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transfer, container, false)
 
-        sharedViewModel.scannedData.observe(viewLifecycleOwner) { scannedData ->
-         Toast.makeText(requireContext(), "$scannedData", Toast.LENGTH_SHORT).show()
+        // Get the arguments using SafeArgs
+        val scannedData = TransferFragmentArgs.fromBundle(requireArguments()).qrResult
                 decryptQR(scannedData)
-        }
         return binding.root
 
     }

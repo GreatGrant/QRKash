@@ -1,4 +1,5 @@
 package com.gralliams.qrkash
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -79,22 +80,28 @@ class VirtualAccountFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
                 binding.apply {
                     tvStatement.text =
-                        "${accountResponse.message} $note $bankName $accountNumber \nThis works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
+                        "${accountResponse.message}. Please make a transfer to $firstName $lastName $bankName $accountNumber\n\nThis works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
                     tvStatement2.text =
                         " \nSince we are working with a test API, click the button below to simulate a bank transfer to the account number generated with a desired amount."
 
                     accountNumberEditText.setText(accountNumber)
                     bankEditText.setText(bankName)
-                    accountNameEditText.setText(accountName)
+                    accountNameEditText.setText("$firstName $lastName")
                     submitButton.setOnClickListener {
 
-                        val isAmountValid = validateField(amountEditText, amountField, "Field cannot be blank.")
-                        val isAccountNameValid = validateField(accountNameEditText, accountNameField, "Field cannot be blank.")
-                        val isBankValid = validateField(bankEditText, bankField, "Field cannot be blank.")
+                        val isAmountValid =
+                            validateField(amountEditText, amountField, "Field cannot be blank.")
+                        val isAccountNameValid = validateField(
+                            accountNameEditText,
+                            accountNameField,
+                            "Field cannot be blank."
+                        )
+                        val isBankValid =
+                            validateField(bankEditText, bankField, "Field cannot be blank.")
 
                         if (!isAmountValid || !isAccountNameValid || !isBankValid) {
                             return@setOnClickListener
-                        }else{
+                        } else {
                             it.visibility = View.INVISIBLE
                         }
 
@@ -168,7 +175,8 @@ class VirtualAccountFragment : Fragment() {
         dialog.show()
 
         view.apply {
-            messageTextView.text = "Transaction with ref${response.data.reference} is successful. Check your wallet."
+            messageTextView.text =
+                "Transaction with ref${response.data.reference} is successful. Check your wallet."
 
             closeButton.setOnClickListener {
                 // Dismiss the dialog
@@ -177,7 +185,11 @@ class VirtualAccountFragment : Fragment() {
         }
     }
 
-    private fun validateField(editText: TextInputEditText, textInputLayout: TextInputLayout, errorMessage: String): Boolean {
+    private fun validateField(
+        editText: TextInputEditText,
+        textInputLayout: TextInputLayout,
+        errorMessage: String
+    ): Boolean {
         val text = editText.text.toString().trim()
         if (text.isEmpty()) {
             textInputLayout.error = errorMessage
