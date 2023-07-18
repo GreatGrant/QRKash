@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.gralliams.qrkash.databinding.BottomSheetLayoutBinding
 import com.gralliams.qrkash.databinding.FragmentTransferBinding
+import com.gralliams.qrkash.model.TransferResponse
 import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -69,9 +72,26 @@ class TransferFragment : Fragment() {
             //TODO() set bank and email.
 
             btnSend.setOnClickListener {
-
+                showBottomSheet(recipient, amount, account, bank)
             }
         }
 
     }
+
+    private fun showBottomSheet(recipient: String, amount: String, account: String, bank: String) {
+        val view = BottomSheetLayoutBinding.inflate(layoutInflater)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(view.root)
+        dialog.show()
+
+        view.apply {
+            messageTextView.text = "Transaction ref: 363378911df712.\nAmount: $amount\nRecipient: $recipient\nBank: $bank\nStatus: Success"
+
+            closeButton.setOnClickListener {
+                // Dismiss the dialog
+                dialog.dismiss()
+            }
+        }
+    }
+
 }
