@@ -31,12 +31,40 @@ class TransferFragment : Fragment() {
         // Inflate the
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_transfer, container, false)
 
-        sharedViewModel.scannedData.observe(viewLifecycleOwner, { scannedData ->
+        sharedViewModel.scannedData.observe(viewLifecycleOwner) { scannedData ->
             binding.apply {
-
+                decryptQR(scannedData)
             }
-        })
+        }
         return binding.root
+
+    }
+
+    private fun decryptQR(stringToDecrpt: String?) {
+
+// Define the regex patterns to match the recipient, amount, account, and bank
+        val recipientPattern = "Recipient: (.*?),".toRegex()
+        val amountPattern = "amount: \\$(.*?),".toRegex()
+        val accountPattern = "account: (.*?),".toRegex()
+        val bankPattern = "bank: (.*?)$".toRegex()
+
+// Use the find method to extract the information using the regex patterns
+        val recipientMatch = stringToDecrpt?.let { recipientPattern.find(it) }
+        val amountMatch = stringToDecrpt?.let { amountPattern.find(it) }
+        val accountMatch = stringToDecrpt?.let { accountPattern.find(it) }
+        val bankMatch = stringToDecrpt?.let { bankPattern.find(it) }
+
+// Extract the matched values
+        val recipient = recipientMatch?.groupValues?.getOrNull(1) ?: ""
+        val amount = amountMatch?.groupValues?.getOrNull(1) ?: ""
+        val account = accountMatch?.groupValues?.getOrNull(1) ?: ""
+        val bank = bankMatch?.groupValues?.getOrNull(1) ?: ""
+
+// Print or use the extracted information as needed
+        println("Recipient: $recipient")
+        println("Amount: $amount")
+        println("Account: $account")
+        println("Bank: $bank")
 
     }
 }
