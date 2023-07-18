@@ -9,12 +9,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
+import com.gralliams.qrkash.api.RetrofitClient
 import com.gralliams.qrkash.databinding.FragmentQrGenerateBinding
+import com.gralliams.qrkash.repository.VirtualAccountRepository
 import com.gralliams.qrkash.viewmodel.QRCodeViewModel
+import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
 
 class QrGenerateFragment : Fragment() {
     private lateinit var binding: FragmentQrGenerateBinding
     private lateinit var viewModel: QRCodeViewModel
+    private val vaViewModel: VirtualAccountViewModel by lazy {
+        ViewModelProvider(
+            this,
+            VirtualAccountViewModelFactory(VirtualAccountRepository(RetrofitClient.apiService))
+        )[VirtualAccountViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,8 +36,12 @@ class QrGenerateFragment : Fragment() {
         viewModel = ViewModelProvider(this)[QRCodeViewModel::class.java]
 
         binding.generateButton.setOnClickListener {
-            val number = binding.etAmount.text.toString()
-            viewModel.generateQRCode(number)
+            val amount = binding.etAmount.text.toString()
+            val recipient = FirebaseAuth.getInstance().currentUser?.displayName
+
+            val stringToEncrypt = "Recipient: $recipient, amount: $amount, account: 7824822527 , bank: WEMA BANK"
+
+            viewModel.generateQRCode(stringToEncrypt)
         }
 
         viewModel.qrCodeImage.observe(viewLifecycleOwner, Observer { bitmap ->
