@@ -26,7 +26,6 @@ class QRCodeViewModel : ViewModel() {
     val qrCodeImage: LiveData<Bitmap> get() = _qrCodeImage
     val scannedText: LiveData<String> get() = _scannedText
 
-
     // Method to generate the QR code based on the input amount
     fun generateQRCode(text: String): Bitmap {
         val width = 500
@@ -48,8 +47,8 @@ class QRCodeViewModel : ViewModel() {
     }
 
     // Method to decode the QR code and extract the text
-    fun decodeQRCode(imageBuffer: ByteBuffer, width: Int, height: Int) {
-        val inputImage = InputImage.fromByteBuffer(imageBuffer, width, height, 0, InputImage.IMAGE_FORMAT_NV21)
+    fun decodeQRCode(imageByteArray: ByteArray, width: Int, height: Int) {
+        val inputImage = InputImage.fromByteArray(imageByteArray, width, height, 0, InputImage.IMAGE_FORMAT_NV21)
 
         // Set up barcode scanner options
         val options = BarcodeScannerOptions.Builder()

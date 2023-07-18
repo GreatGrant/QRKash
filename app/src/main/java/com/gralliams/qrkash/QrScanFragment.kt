@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
@@ -35,6 +36,8 @@ class QrScanFragment : Fragment() {
         return binding.root
     }
 
+    @ExperimentalGetImage
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         qrCodeViewModel = ViewModelProvider(requireActivity())[QRCodeViewModel::class.java]
@@ -46,6 +49,7 @@ class QrScanFragment : Fragment() {
         startCamera()
     }
 
+    @ExperimentalGetImage
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
@@ -81,21 +85,28 @@ class QrScanFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+    @ExperimentalGetImage
     private fun processImage(imageProxy: ImageProxy) {
-        // Get the image data and dimensions
-        val imageBuffer: ByteBuffer = imageProxy.planes[0].buffer
-        val imageWidth = imageProxy.width
-        val imageHeight = imageProxy.height
+        val image = imageProxy.image ?: return
 
-        // Pass the captured image and dimensions to the ViewModel for decoding
-        qrCodeViewModel.decodeQRCode(imageBuffer, imageWidth, imageHeight)
+        val nv21ByteArray = YuvToNv21(image).nv21ByteArray
+
+        // Pass the converted image and dimensions to the ViewModel for decoding
+        qrCodeViewModel.decodeQRCode(nv21ByteArray, image.width, image.height)
 
         imageProxy.close()
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         cameraExecutor.shutdown()
     }
+}
 
+fun ByteBuffer.toByteArray(): ByteArray {
+    rewind() // Rewind the buffer to copy the whole content
+    val data = ByteArray(remaining())
+    get(data)
+    return data
 }
