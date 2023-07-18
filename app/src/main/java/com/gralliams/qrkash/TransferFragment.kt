@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.viewModels
 import com.gralliams.qrkash.databinding.FragmentTransferBinding
 import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
@@ -60,11 +61,17 @@ class TransferFragment : Fragment() {
         val account = accountMatch?.groupValues?.getOrNull(1) ?: ""
         val bank = bankMatch?.groupValues?.getOrNull(1) ?: ""
 
-// Print or use the extracted information as needed
-        println("Recipient: $recipient")
-        println("Amount: $amount")
-        println("Account: $account")
-        println("Bank: $bank")
+// use the extracted information as needed
+        binding.apply {
+            etUsername.setText(recipient)
+            etAmount.setText(amount)
+            etAccountNumber.setText(account)
+            //TODO() set bank and email.
+
+            btnSend.setOnClickListener {
+
+            }
+        }
 
     }
 }
