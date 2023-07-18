@@ -1,5 +1,4 @@
 package com.gralliams.qrkash
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.api.RetrofitClient
 import com.gralliams.qrkash.databinding.BottomSheetLayoutBinding
@@ -35,7 +37,7 @@ class VirtualAccountFragment : Fragment() {
         ViewModelProvider(
             this,
             VirtualAccountViewModelFactory(VirtualAccountRepository(RetrofitClient.apiService))
-        ).get(VirtualAccountViewModel::class.java)
+        )[VirtualAccountViewModel::class.java]
     }
     private val walletViewModel: WalletViewModel by activityViewModels()
 
@@ -80,12 +82,24 @@ class VirtualAccountFragment : Fragment() {
                         "${accountResponse.message} $note $bankName $accountNumber \nThis works like a regular bank account number. Transfer from any source to $accountNumber, select $bankName as the destination bank. And funds will be credited to your wallet automatically."
                     tvStatement2.text =
                         " \nSince we are working with a test API, click the button below to simulate a bank transfer to the account number generated with a desired amount."
+
                     accountNumberEditText.setText(accountNumber)
                     bankEditText.setText(bankName)
-                    amountEditText.setText("5500")
-
+                    accountNameEditText.setText(accountName)
                     submitButton.setOnClickListener {
-                        it.visibility = View.INVISIBLE
+
+                        val isAmountValid = validateField(amountEditText, amountField, "Field cannot be blank.")
+                        val isAccountNameValid = validateField(accountNameEditText, accountNameField, "Field cannot be blank.")
+                        val isBankValid = validateField(bankEditText, bankField, "Field cannot be blank.")
+
+                        if (!isAmountValid || !isAccountNameValid || !isBankValid) {
+                            return@setOnClickListener
+                        }else{
+                            it.visibility = View.INVISIBLE
+                        }
+
+                        // All required fields are filled, proceed with the form submission
+
                         val transferRequestBody =
                             TransferRequest(
                                 accountBank = bankEditText.text.toString(),
@@ -133,16 +147,17 @@ class VirtualAccountFragment : Fragment() {
                     "${response.status} ${response.message}",
                     Toast.LENGTH_SHORT
                 ).show()
+                sendWebhook(transferRequest)
                 progressBar.visibility = View.GONE
                 showBottomSheet(it)
-                sendWebhook(it)
+
             }
         }
     }
 
-    private fun sendWebhook(response: TransferResponse) {
+    private fun sendWebhook(response: TransferRequest) {
         val currentBalance = walletViewModel.balanceLiveData.value ?: 0
-        val newBalance = currentBalance + response.data.amount
+        val newBalance = currentBalance + response.amount
         walletViewModel.updateBalance(newBalance)
     }
 
@@ -161,4 +176,16 @@ class VirtualAccountFragment : Fragment() {
             }
         }
     }
+
+    private fun validateField(editText: TextInputEditText, textInputLayout: TextInputLayout, errorMessage: String): Boolean {
+        val text = editText.text.toString().trim()
+        if (text.isEmpty()) {
+            textInputLayout.error = errorMessage
+            return false
+        } else {
+            textInputLayout.error = null
+            return true
+        }
+    }
+
 }
