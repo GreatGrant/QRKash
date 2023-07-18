@@ -11,6 +11,8 @@ import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.gralliams.qrkash.databinding.BottomSheetLayoutBinding
 import com.gralliams.qrkash.databinding.FragmentTransferBinding
 import com.gralliams.qrkash.model.TransferResponse
@@ -65,6 +67,17 @@ class TransferFragment : Fragment() {
             etBank.setText(bank)
             etEmail.setText(bank)
             btnSend.setOnClickListener {
+                val isAmountValid = validateField(etAmount , tilAmount, "Enter an amount")
+                val isAccountValid = validateField(etAccountNumber , tilAccountNumber, "Enter account number")
+                val isRecipientValid = validateField(etUsername , tilUsername, "Enter account number")
+                val isBankValid = validateField(etBank , tilBank, "Enter account number")
+
+                if (!isAmountValid || !isRecipientValid || !isBankValid || !isAccountValid) {
+                    return@setOnClickListener
+                } else {
+                    it.visibility = View.INVISIBLE
+                }
+
                 showBottomSheet(recipient, amount, account, bank)
             }
         }
@@ -86,5 +99,21 @@ class TransferFragment : Fragment() {
             }
         }
     }
+
+    private fun validateField(
+        editText: TextInputEditText,
+        textInputLayout: TextInputLayout,
+        errorMessage: String
+    ): Boolean {
+        val text = editText.text.toString().trim()
+        return if (text.isEmpty()) {
+            textInputLayout.error = errorMessage
+            false
+        } else {
+            textInputLayout.error = null
+            true
+        }
+    }
+
 
 }
