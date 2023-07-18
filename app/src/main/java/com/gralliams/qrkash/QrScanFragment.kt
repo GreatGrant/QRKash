@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -42,11 +43,16 @@ class QrScanFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         qrCodeViewModel = ViewModelProvider(requireActivity())[QRCodeViewModel::class.java]
 
+        qrCodeViewModel.scannedText.observe(viewLifecycleOwner){ scannedText ->
+            Toast.makeText(requireContext(), "$scannedText", Toast.LENGTH_SHORT).show()
+        }
         // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         // Set up the camera preview and start scanning
         startCamera()
+
+
     }
 
     @ExperimentalGetImage
