@@ -14,15 +14,18 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.gralliams.qrkash.databinding.FragmentQrScanBinding
 import com.gralliams.qrkash.viewmodel.QRCodeViewModel
+import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class QrScanFragment : Fragment() {
+    private val sharedViewModel: ScannedSharedViewModel by viewModels()
     private lateinit var binding: FragmentQrScanBinding
     private lateinit var qrCodeViewModel: QRCodeViewModel
     private lateinit var cameraExecutor: ExecutorService
@@ -44,7 +47,8 @@ class QrScanFragment : Fragment() {
         qrCodeViewModel = ViewModelProvider(requireActivity())[QRCodeViewModel::class.java]
 
         qrCodeViewModel.scannedText.observe(viewLifecycleOwner){ scannedText ->
-            Toast.makeText(requireContext(), "$scannedText", Toast.LENGTH_SHORT).show()
+            sharedViewModel.setScannedData(scannedText)
+
         }
         // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()

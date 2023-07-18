@@ -74,10 +74,19 @@
         android:id="@+id/qrScanFragment"
         android:name="com.gralliams.qrkash.QrScanFragment"
         android:label="fragment_qr_scan"
-        tools:layout="@layout/fragment_qr_scan" />
+        tools:layout="@layout/fragment_qr_scan" >
+        <action
+            android:id="@+id/action_qrScanFragment_to_transferFragment"
+            app:destination="@id/transferFragment" />
+    </fragment>
     <fragment
         android:id="@+id/virtualAccountFragment"
         tools:layout="@layout/fragment_virtual_account"
         android:name="com.gralliams.qrkash.VirtualAccountFragment"
         android:label="VirtualAccountFragment" />
+    <fragment
+        android:id="@+id/transferFragment"
+        tools:layout="@layout/fragment_transfer"
+        android:name="com.gralliams.qrkash.TransferFragment"
+        android:label="TransferFragment" />
 </navigation>
