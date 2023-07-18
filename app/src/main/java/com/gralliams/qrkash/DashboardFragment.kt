@@ -41,8 +41,14 @@ class DashboardFragment : Fragment() {
             username.text = "User"
         }
 
-        binding.btnTopup.setOnClickListener {
-            showTopupOptionsDialog()
+        binding.apply {
+            btnTopup.setOnClickListener {
+                showTopupOptionsDialog()
+            }
+
+            btnTransfer.setOnClickListener {
+                findNavController().navigate(R.id.action_dashboardFragment_to_qrScanFragment)
+            }
         }
 
         return binding.root
