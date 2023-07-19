@@ -26,7 +26,12 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         auth = FirebaseAuth.getInstance()
 
-
+        val keepLoggedIn = getKeepLoggedInPreference()
+        if (keepLoggedIn) {
+            // Perform automatic login
+            navigateToDashboard()
+//            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+        }
         binding.btnSignIn.setOnClickListener {
             login()
         }
@@ -92,6 +97,12 @@ class LoginFragment : Fragment() {
             apply()
         }
     }
+
+    private fun getKeepLoggedInPreference(): Boolean {
+        val sharedPref = requireContext().getSharedPreferences("login_pref", Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("keep_logged_in", false)
+    }
+
 
     private fun navigateToDashboard() {
         // Clear the activity stack and start DashboardActivity as a new task
