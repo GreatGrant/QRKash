@@ -35,6 +35,7 @@ class SignupFragment : Fragment() {
     }
 
     private fun validateFields() {
+        binding.progressBar.visibility = View.VISIBLE
         val fullName = binding.etFullName.text.toString().trim()
         val email = binding.etEmailAddress.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
@@ -50,32 +51,34 @@ class SignupFragment : Fragment() {
         for ((editText, value) in fields) {
             if (value.isEmpty()) {
                 editText.error = "${editText.hint} is required"
+                binding.progressBar.visibility = View.INVISIBLE
                 return
             }
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.etEmailAddress.error = "Invalid Email Address"
+            binding.progressBar.visibility = View.INVISIBLE
             return
         }
 
         // Validate password length
         if (password.length < 6) {
             binding.etPassword.error = "Password must be at least 6 characters"
+            binding.progressBar.visibility = View.INVISIBLE
             return
         }
 
         if (password != confirmPassword) {
             binding.etConfirmPassword.error = "Passwords do not match"
+            binding.progressBar.visibility = View.INVISIBLE
             return
         }
 
 
-        binding.progressBar.visibility = View.VISIBLE
 
         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
             .addOnCompleteListener { task ->
-                binding.progressBar.visibility = View.GONE
                 if (task.isSuccessful) {
                     val signInMethods = task.result?.signInMethods
                     if (!signInMethods.isNullOrEmpty()) {
@@ -94,6 +97,7 @@ class SignupFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // Registration success, user account created
+                    binding.progressBar.visibility = View.GONE
                     Toast.makeText(context, "Registration Succesful", Toast.LENGTH_SHORT).show()
                     val user = task.result?.user
                     val currentUser = FirebaseAuth.getInstance().currentUser
