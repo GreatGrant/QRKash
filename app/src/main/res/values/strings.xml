@@ -5,4 +5,8 @@
     <string name="login">Login</string>
     <string name="get_started">Get Started</string>
     <string name="virtual_account_statement">Your account number is ${accountNumber} in ${bankName}. ${note}</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

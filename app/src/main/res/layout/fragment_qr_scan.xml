@@ -1,4 +1,5 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,17 +42,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
-        <Button
+        <TextView
             android:id="@+id/tilAmount"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
-            android:background="@drawable/button_bg"
+            android:background="@drawable/rounded_background"
+            android:drawablePadding="8dp"
+            android:padding="16dp"
+            android:text="Transfer made to QRKash are free without fee and instant"
+            android:textColor="#84FFFFFF"
             app:layout_constraintBottom_toTopOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2"/>
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
         <Button
             android:id="@+id/generate_button"
@@ -67,6 +71,32 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Hold the QR Code inside the frame, it will be scanned immediately."
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/generate_button" />
+
+        <ImageView
+            android:id="@+id/imageViewshield"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tilAmount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.09"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tilAmount"
+            app:layout_constraintVertical_bias="0.050000012"
+            app:srcCompat="@drawable/baseline_privacy_tip_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

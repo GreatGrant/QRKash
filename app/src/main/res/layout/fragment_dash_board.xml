@@ -63,7 +63,7 @@
             android:layout_height="66dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilSearchBar"
-            android:src="@drawable/baseline_person_4_24"
+            android:src="@drawable/baseline_person_24"
             tools:srcCompat="@tools:sample/avatars" />
 
         <!-- "Hello User" Text -->
