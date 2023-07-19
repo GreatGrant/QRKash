@@ -22,7 +22,7 @@ private var _binding: FragmentNotificationsBinding? = null
     savedInstanceState: Bundle?
   ): View {
     val notificationsViewModel =
-            ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        ViewModelProvider(this)[NotificationsViewModel::class.java]
 
     _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
     val root: View = binding.root

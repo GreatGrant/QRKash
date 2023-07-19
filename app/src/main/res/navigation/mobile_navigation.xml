@@ -9,10 +9,26 @@
         android:id="@+id/navigation_home"
         android:name="com.gralliams.qrkash.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_transferFragment2"
+            app:destination="@id/transferFragment2" />
+        <action
+            android:id="@+id/action_navigation_home_to_virtualAccountFragment2"
+            app:destination="@id/virtualAccountFragment2" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_dashboard"
+            app:destination="@id/navigation_history" />
+        <action
+            android:id="@+id/action_navigation_home_to_qrScanFragment2"
+            app:destination="@id/qrScanFragment2" />
+        <action
+            android:id="@+id/action_navigation_home_to_qrGenerateFragment2"
+            app:destination="@id/qrGenerateFragment2" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_history"
         android:name="com.gralliams.qrkash.ui.history.HistoryFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_history" />
@@ -22,4 +38,22 @@
         android:name="com.gralliams.qrkash.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/transferFragment2"
+        tools:layout="@layout/fragment_transfer"
+        android:name="com.gralliams.qrkash.TransferFragment"
+        android:label="TransferFragment" />
+    <fragment
+        android:id="@+id/virtualAccountFragment2"
+        tools:layout="@layout/fragment_virtual_account"
+        android:name="com.gralliams.qrkash.VirtualAccountFragment"
+        android:label="VirtualAccountFragment" />
+    <fragment
+        android:id="@+id/qrScanFragment2"
+        android:name="com.gralliams.qrkash.QrScanFragment"
+        android:label="QrScanFragment" />
+    <fragment
+        android:id="@+id/qrGenerateFragment2"
+        android:name="com.gralliams.qrkash.QrGenerateFragment"
+        android:label="QrGenerateFragment" />
 </navigation>
