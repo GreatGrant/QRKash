@@ -20,7 +20,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Set up the custom transparent toolbar
-        setSupportActionBar(binding.toolbar)
+//        setSupportActionBar(binding.toolbar)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_dashboard) as NavHostFragment
