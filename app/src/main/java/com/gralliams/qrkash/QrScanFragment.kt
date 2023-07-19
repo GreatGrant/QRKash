@@ -1,5 +1,6 @@
 package com.gralliams.qrkash
-
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +13,12 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.gralliams.qrkash.R
 import com.gralliams.qrkash.databinding.FragmentQrScanBinding
 import com.gralliams.qrkash.model.DecryptedInfo
 import com.gralliams.qrkash.viewmodel.QRCodeViewModel
@@ -30,44 +33,41 @@ class QrScanFragment : Fragment() {
     private lateinit var qrCodeViewModel: QRCodeViewModel
     private lateinit var cameraExecutor: ExecutorService
 
+    companion object {
+        private const val REQUEST_CAMERA_PERMISSION = 1001
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_qr_scan, container, false)
-
         return binding.root
     }
 
     @ExperimentalGetImage
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         qrCodeViewModel = ViewModelProvider(requireActivity())[QRCodeViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[ScannedSharedViewModel::class.java]
 
         qrCodeViewModel.scannedText.observe(viewLifecycleOwner) { scannedText ->
-            //Todo() Check if the scanned data has a valid format
-            // Check if the scanned data has a valid format
             val decryptedInfo = decryptQR(scannedText)
 
             if (decryptedInfo.isDataValid()) {
-                // If it's valid, set it in the sharedViewModel and navigate to the next fragment
                 sharedViewModel.setScannedData(scannedText)
                 findNavController().navigate(R.id.action_qrScanFragment2_to_transferFragment2)
             } else {
-                // If it's invalid, show a toast message
-                Toast.makeText(requireContext(), "$scannedText Invalid scanned data format.\nEnsure the code you are scanning is generated from QRKash.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "$scannedText Invalid scanned data format.\nEnsure the code you are scanning is generated from QRKash.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
-        // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
-
-        // Set up the camera preview and start scanning
         startCamera()
-
 
     }
 
@@ -102,6 +102,7 @@ class QrScanFragment : Fragment() {
 
             } catch (ex: Exception) {
                 // Handle camera initialization error
+                ex.printStackTrace()
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
@@ -117,7 +118,26 @@ class QrScanFragment : Fragment() {
         qrCodeViewModel.decodeQRCode(nv21ByteArray, image.width, image.height)
 
         imageProxy.close()
-
+    }
+    @ExperimentalGetImage
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Camera permission granted, start the camera
+                startCamera()
+            } else {
+                // Camera permission denied, show a message or handle the case accordingly
+                Toast.makeText(
+                    requireContext(),
+                    "Camera permission is required to scan QR codes.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -160,12 +180,5 @@ class QrScanFragment : Fragment() {
         return DecryptedInfo(recipient, amount, email, account, bank)
     }
 
-}
-
-fun ByteBuffer.toByteArray(): ByteArray {
-    rewind() // Rewind the buffer to copy the whole content
-    val data = ByteArray(remaining())
-    get(data)
-    return data
 }
 

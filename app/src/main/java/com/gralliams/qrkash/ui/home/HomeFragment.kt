@@ -1,9 +1,14 @@
 package com.gralliams.qrkash.ui.home
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,7 +24,10 @@ class HomeFragment : Fragment() {
 private var _binding: FragmentHomeBinding? = null
   // This property is only valid between onCreateView and
   // onDestroyView.
-     private val binding get() = _binding!!
+
+    companion object {
+        private const val CAMERA_PERMISSION_REQUEST_CODE = 101
+    }private val binding get() = _binding!!
     private lateinit var viewModel: DashboardViewModel
     private lateinit var walletViewModel: WalletViewModel
 
@@ -35,6 +43,8 @@ private var _binding: FragmentHomeBinding? = null
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+
+
 
         val username = binding.tvUserName
         val currentUser = FirebaseAuth.getInstance().currentUser
@@ -56,7 +66,18 @@ private var _binding: FragmentHomeBinding? = null
             }
 
             btnTransfer.setOnClickListener {
-                findNavController().navigate(R.id.action_navigation_home_to_qrScanFragment2)
+                // Check if the camera permission is already granted
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    // Camera permission is granted, proceed with your app's flow
+                    navigateToQrScanFragment()
+                } else {
+                    // Camera permission is not granted, request it
+                    requestCameraPermission()
+                }
             }
         }
 
@@ -66,8 +87,12 @@ private var _binding: FragmentHomeBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         walletViewModel = ViewModelProvider(this)[WalletViewModel::class.java]
+        observeWalletBalance()
 
 
+    }
+
+    private fun observeWalletBalance() {
         walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
             binding.tvBalanceAmount.visibility = View.VISIBLE
             binding.tvBalanceAmount.text = "₦${balance}"
@@ -92,8 +117,47 @@ private var _binding: FragmentHomeBinding? = null
             .show()
     }
 
+    private fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.CAMERA),
+            CAMERA_PERMISSION_REQUEST_CODE
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        observeWalletBalance()
+    }
     override fun onDestroyView() {
             super.onDestroyView()
             _binding = null
         }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Camera permission is granted, proceed with your app's flow
+                // For example, navigate to the QrScanFragment
+                navigateToQrScanFragment()
+            } else {
+                // Camera permission is denied, handle this case (e.g., show an explanation or exit the app)
+                // You can show a toast or dialog explaining why the permission is required
+                Toast.makeText(
+                    requireContext(),
+                    "Camera permission is required to use the QR scanner.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun navigateToQrScanFragment() {
+        findNavController().navigate(R.id.action_navigation_home_to_qrScanFragment2)
+
+    }
 }

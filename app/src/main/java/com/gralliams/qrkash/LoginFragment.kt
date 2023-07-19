@@ -1,6 +1,7 @@
 package com.gralliams.qrkash
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -26,7 +27,8 @@ class LoginFragment : Fragment() {
         val keepLoggedIn = getKeepLoggedInPreference()
         if (keepLoggedIn) {
             // Perform automatic login
-            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+            startActivity(Intent(requireContext(), DashboardActivity::class.java))
+//            findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
         }
 
         binding.tvCreateAccount.setOnClickListener {
@@ -55,7 +57,7 @@ class LoginFragment : Fragment() {
                         saveKeepLoggedInPreference(true)
                     }
                     // User login successful, handle success case
-                    findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+                    startActivity(Intent(requireContext(), DashboardActivity::class.java))
                 } else {
                     // User login failed, handle failure case
                     Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()

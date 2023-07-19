@@ -2,12 +2,14 @@ package com.gralliams.qrkash
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -142,4 +144,14 @@ class TransferFragment : Fragment() {
             true
         }
     }
+
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == android.R.id.home) {
+//            // Navigate to HomeFragment when the back button is pressed
+//            findNavController().navigate(R.id.action_transferFragment2)
+//            return true
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
+
 }
