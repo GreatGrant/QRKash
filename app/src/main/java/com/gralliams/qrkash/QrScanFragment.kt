@@ -14,13 +14,12 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gralliams.qrkash.databinding.FragmentQrScanBinding
+import com.gralliams.qrkash.model.DecryptedInfo
 import com.gralliams.qrkash.viewmodel.QRCodeViewModel
 import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
-import com.gralliams.qrkash.viewmodel.WalletViewModel
 import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -50,11 +49,17 @@ class QrScanFragment : Fragment() {
 
         qrCodeViewModel.scannedText.observe(viewLifecycleOwner) { scannedText ->
             //Todo() Check if the scanned data has a valid format
+            // Check if the scanned data has a valid format
+            val decryptedInfo = decryptQR(scannedText)
+
+            if (decryptedInfo.isDataValid()) {
                 // If it's valid, set it in the sharedViewModel and navigate to the next fragment
                 sharedViewModel.setScannedData(scannedText)
                 findNavController().navigate(R.id.action_qrScanFragment2_to_transferFragment2)
+            } else {
                 // If it's invalid, show a toast message
-//              Todo()  Toast.makeText(requireContext(), "$scannedText Invalid scanned data format.\nEnsure the code you are scanning is generated from QRKash.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "$scannedText Invalid scanned data format.\nEnsure the code you are scanning is generated from QRKash.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Initialize the camera executor
@@ -120,20 +125,39 @@ class QrScanFragment : Fragment() {
         cameraExecutor.shutdown()
     }
 
-    private fun isValidFormat(scannedText: String): Boolean {
-        val template = "Recipient: \$recipient, amount: \$amount, account: \$account, email: \${FirebaseAuth.getInstance().currentUser?.email}, bank: \$bank"
+    private fun DecryptedInfo.isDataValid(): Boolean {
+        // Implement your logic here to check if the decrypted data is valid
+        // For example, you can check if recipient, amount, account, email, and bank are not empty
+        return recipient.isNotEmpty() && amount.isNotEmpty() && account.isNotEmpty() && email.isNotEmpty() && bank.isNotEmpty()
+    }
 
-        // Regular expression pattern to match the dynamic placeholders in the template
-        val pattern = "\\$[a-zA-Z]+"
+    private fun decryptQR(stringToDecrypt: String?): DecryptedInfo {
+        // Extracting recipient
+        val recipientRegex = Regex("Recipient:\\s(.*?),")
+        val recipientMatch = stringToDecrypt?.let { recipientRegex.find(it) }
+        val recipient = recipientMatch?.groupValues?.get(1)?.trim() ?: ""
 
-        // Find all matches of placeholders in the template
-        val templateMatches = Regex(pattern).findAll(template).map { it.value }.toList()
+        // Extracting amount
+        val amountRegex = Regex("amount:\\s(.*?),")
+        val amountMatch = stringToDecrypt?.let { amountRegex.find(it) }
+        val amount = amountMatch?.groupValues?.get(1)?.trim() ?: ""
 
-        // Find all matches of placeholders in the input
-        val inputMatches = Regex(pattern).findAll(scannedText).map { it.value }.toList()
+        // Extracting email
+        val emailRegex = Regex("email:\\s(.*?),")
+        val emailMatch = stringToDecrypt?.let { emailRegex.find(it) }
+        val email = emailMatch?.groupValues?.get(1)?.trim() ?: ""
 
-        // If the number of placeholders in the input matches the template and the structure is the same, return true
-        return templateMatches == inputMatches
+        // Extracting account
+        val accountRegex = Regex("account:\\s(.*?),")
+        val accountMatch = stringToDecrypt?.let { accountRegex.find(it) }
+        val account = accountMatch?.groupValues?.get(1)?.trim() ?: ""
+
+        // Extracting bank
+        val bankRegex = Regex("bank:\\s(.*)")
+        val bankMatch = stringToDecrypt?.let { bankRegex.find(it) }
+        val bank = bankMatch?.groupValues?.get(1)?.trim() ?: ""
+
+        return DecryptedInfo(recipient, amount, email, account, bank)
     }
 
 }
