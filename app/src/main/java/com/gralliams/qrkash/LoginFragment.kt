@@ -25,6 +25,8 @@ class LoginFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         auth = FirebaseAuth.getInstance()
+
+
         binding.btnSignIn.setOnClickListener {
             login()
         }
@@ -68,7 +70,7 @@ class LoginFragment : Fragment() {
                     if (keepLoggedIn) {
                         saveKeepLoggedInPreference(true)
                     }
-                    startActivity(Intent(requireContext(), DashboardActivity::class.java))
+                    navigateToDashboard()
                 } else {
                     Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
@@ -89,5 +91,12 @@ class LoginFragment : Fragment() {
             putBoolean("keep_logged_in", keepLoggedIn)
             apply()
         }
+    }
+
+    private fun navigateToDashboard() {
+        // Clear the activity stack and start DashboardActivity as a new task
+        val intent = Intent(requireContext(), DashboardActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 }
