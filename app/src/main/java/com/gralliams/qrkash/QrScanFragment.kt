@@ -48,15 +48,15 @@ class QrScanFragment : Fragment() {
         qrCodeViewModel = ViewModelProvider(requireActivity())[QRCodeViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[ScannedSharedViewModel::class.java]
 
-        qrCodeViewModel.scannedText.observe(viewLifecycleOwner){ scannedText ->
-            sharedViewModel.setScannedData(scannedText)
-
-//            Toast.makeText(requireContext(), "$scannedText", Toast.LENGTH_SHORT).show()
-//            val action = QrScanFragmentDirections.actionQrScanFragmentToTransferFragment(scannedText)
-//            findNavController().navigate(action)
-
-            findNavController().navigate(R.id.action_qrScanFragment2_to_transferFragment2)
+        qrCodeViewModel.scannedText.observe(viewLifecycleOwner) { scannedText ->
+            //Todo() Check if the scanned data has a valid format
+                // If it's valid, set it in the sharedViewModel and navigate to the next fragment
+                sharedViewModel.setScannedData(scannedText)
+                findNavController().navigate(R.id.action_qrScanFragment2_to_transferFragment2)
+                // If it's invalid, show a toast message
+//              Todo()  Toast.makeText(requireContext(), "$scannedText Invalid scanned data format.\nEnsure the code you are scanning is generated from QRKash.", Toast.LENGTH_SHORT).show()
         }
+
         // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -119,6 +119,23 @@ class QrScanFragment : Fragment() {
         super.onDestroyView()
         cameraExecutor.shutdown()
     }
+
+    private fun isValidFormat(scannedText: String): Boolean {
+        val template = "Recipient: \$recipient, amount: \$amount, account: \$account, email: \${FirebaseAuth.getInstance().currentUser?.email}, bank: \$bank"
+
+        // Regular expression pattern to match the dynamic placeholders in the template
+        val pattern = "\\$[a-zA-Z]+"
+
+        // Find all matches of placeholders in the template
+        val templateMatches = Regex(pattern).findAll(template).map { it.value }.toList()
+
+        // Find all matches of placeholders in the input
+        val inputMatches = Regex(pattern).findAll(scannedText).map { it.value }.toList()
+
+        // If the number of placeholders in the input matches the template and the structure is the same, return true
+        return templateMatches == inputMatches
+    }
+
 }
 
 fun ByteBuffer.toByteArray(): ByteArray {
@@ -127,3 +144,4 @@ fun ByteBuffer.toByteArray(): ByteArray {
     get(data)
     return data
 }
+

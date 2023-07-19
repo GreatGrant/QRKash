@@ -59,8 +59,10 @@
         android:name="com.gralliams.qrkash.QrScanFragment"
         android:label="QrScanFragment" >
         <action
-            android:id="@+id/action_qrScanFragment2_to_transferFragment2"
-            app:destination="@id/transferFragment2" />
+        android:id="@+id/action_qrScanFragment2_to_transferFragment2"
+        app:destination="@id/transferFragment2"
+        app:popUpTo="@+id/qrScanFragment2"
+        app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/qrGenerateFragment2"
