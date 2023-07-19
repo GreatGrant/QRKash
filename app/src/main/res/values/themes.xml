@@ -3,7 +3,10 @@
     <style name="Base.Theme.QRKash" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
          <item name="colorPrimary">@color/color_btn</item>
+
     </style>
 
     <style name="Theme.QRKash" parent="Base.Theme.QRKash" />
+
+
 </resources>

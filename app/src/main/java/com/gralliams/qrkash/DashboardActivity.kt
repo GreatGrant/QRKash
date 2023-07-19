@@ -1,4 +1,5 @@
 package com.gralliams.qrkash
+
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +15,12 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_QRKash)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Set up the custom transparent toolbar
+        setSupportActionBar(binding.toolbar)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_dashboard) as NavHostFragment
@@ -32,8 +37,10 @@ class DashboardActivity : AppCompatActivity() {
 
             if (hideBottomNav) {
                 binding.navView.visibility = View.GONE
+                supportActionBar?.hide()
             } else {
                 binding.navView.visibility = View.VISIBLE
+                supportActionBar?.show()
             }
         }
     }
