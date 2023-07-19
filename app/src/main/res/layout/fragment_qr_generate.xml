@@ -82,6 +82,7 @@
             android:id="@+id/textView2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="87dp"
             android:text="Enter the amount you want to receive, click the button above to generate a QR code.\nYou can  scan the generated code using the recipient's QRKash app.\nYour wallet will be topped once the user make's the transfer."
             android:textAlignment="center"
