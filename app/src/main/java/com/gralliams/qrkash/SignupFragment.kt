@@ -71,9 +71,11 @@ class SignupFragment : Fragment() {
         }
 
 
+        binding.progressBar.visibility = View.VISIBLE
 
         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
             .addOnCompleteListener { task ->
+                binding.progressBar.visibility = View.GONE
                 if (task.isSuccessful) {
                     val signInMethods = task.result?.signInMethods
                     if (!signInMethods.isNullOrEmpty()) {
@@ -111,7 +113,7 @@ class SignupFragment : Fragment() {
                             if (updateProfileTask.isSuccessful) {
                                 // Profile updated successfully
                                 // Proceed with any additional logic or navigation
-                                startActivity(Intent(requireContext(), DashboardActivity::class.java))
+                                navigateToDashboard()
 //                                findNavController().navigate(R.id.action_signupFragment_to_dashboardFragment)
                             } else {
                                 // Profile update failed
@@ -161,6 +163,11 @@ class SignupFragment : Fragment() {
 
     }
 
-
+    private fun navigateToDashboard() {
+        // Clear the activity stack and start DashboardActivity as a new task
+        val intent = Intent(requireContext(), DashboardActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+    }
 
 }

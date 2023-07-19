@@ -1,5 +1,6 @@
 package com.gralliams.qrkash
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -178,6 +179,13 @@ class QrScanFragment : Fragment() {
         val bank = bankMatch?.groupValues?.get(1)?.trim() ?: ""
 
         return DecryptedInfo(recipient, amount, email, account, bank)
+    }
+
+    private fun navigateToDashboard() {
+        // Clear the activity stack and start DashboardActivity as a new task
+        val intent = Intent(requireContext(), DashboardActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
 }
