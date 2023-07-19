@@ -55,7 +55,7 @@ class QrScanFragment : Fragment() {
 //            val action = QrScanFragmentDirections.actionQrScanFragmentToTransferFragment(scannedText)
 //            findNavController().navigate(action)
 
-            findNavController().navigate(R.id.action_qrScanFragment_to_transferFragment)
+            findNavController().navigate(R.id.action_qrScanFragment2_to_transferFragment2)
         }
         // Initialize the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
