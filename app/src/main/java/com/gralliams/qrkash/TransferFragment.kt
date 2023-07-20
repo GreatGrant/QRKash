@@ -85,7 +85,7 @@ class TransferFragment : Fragment() {
                     return@setOnClickListener
                 }else{
                     walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
-                        val message = "Transaction ref: 363378911df712.\nAmount: ${etAmount.text.toString()}\nRecipient: ${etUsername.text.toString()}\nBank: ${etBank.text.toString()}\nAccount: ${etAccountNumber.text.toString()}\nStatus: Success\nBalance: ${balance}}"
+                        val message = "Transaction ref: 363378911df712.\nAmount: ${etAmount.text.toString()}\nRecipient: ${etUsername.text.toString()}\nBank: ${etBank.text.toString()}\nAccount: ${etAccountNumber.text.toString()}\nStatus: Success\nBalance: ${balance}"
                         showBottomSheet(message, R.drawable.baseline_security_update_good_24)
                     }
                 }
