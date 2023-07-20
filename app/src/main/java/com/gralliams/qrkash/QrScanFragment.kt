@@ -181,12 +181,7 @@ class QrScanFragment : Fragment() {
         return DecryptedInfo(recipient, amount, email, account, bank)
     }
 
-    private fun navigateToDashboard() {
-        // Clear the activity stack and start DashboardActivity as a new task
-        val intent = Intent(requireContext(), DashboardActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
-    }
+
 
 }
 
