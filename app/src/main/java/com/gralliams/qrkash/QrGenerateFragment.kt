@@ -52,6 +52,7 @@ class QrGenerateFragment : Fragment() {
     }
 
     private fun generateQRCode() {
+        binding.imageViewInsideCard.visibility = View.VISIBLE
         val amount = binding.etAmount.text.toString()
         val recipient = FirebaseAuth.getInstance().currentUser?.displayName
 
