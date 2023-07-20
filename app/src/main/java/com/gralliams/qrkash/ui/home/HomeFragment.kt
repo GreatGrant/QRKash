@@ -10,12 +10,15 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.R
+import com.gralliams.qrkash.adapters.TransactionsAdapter
 import com.gralliams.qrkash.databinding.FragmentHomeBinding
+import com.gralliams.qrkash.db.TransactionItem
 import com.gralliams.qrkash.viewmodel.DashboardViewModel
 import com.gralliams.qrkash.viewmodel.TransactionsViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
@@ -31,6 +34,7 @@ class HomeFragment : Fragment() {
     }private val binding get() = _binding!!
     private lateinit var viewModel: DashboardViewModel
     private lateinit var walletViewModel: WalletViewModel
+    private lateinit var transactionsAdapter: TransactionsAdapter
 
 
     override fun onCreateView(
@@ -42,7 +46,6 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
         transactionsViewModel = ViewModelProvider(this)[TransactionsViewModel::class.java]
 
@@ -96,6 +99,16 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         walletViewModel = ViewModelProvider(this)[WalletViewModel::class.java]
         observeWalletBalance()
+
+        // Initialize the ListView adapter with an empty list
+        transactionsAdapter = TransactionsAdapter(requireContext(), emptyList())
+        binding.listViewTransactionHistory.adapter = transactionsAdapter
+
+        // Observe changes in the LiveData and update the ListView
+        transactionsViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+            transactionsAdapter.clear()
+            transactionsAdapter.addAll(transactions)
+        }
 
 
     }
