@@ -25,6 +25,12 @@
         <action
             android:id="@+id/action_navigation_home_to_qrGenerateFragment2"
             app:destination="@id/qrGenerateFragment2" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_history"
+            app:destination="@id/navigation_history" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 
     <fragment

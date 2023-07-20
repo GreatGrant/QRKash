@@ -51,6 +51,7 @@ class DashboardFragment : Fragment() {
             btnTransfer.setOnClickListener {
                 findNavController().navigate(R.id.action_dashboardFragment_to_qrScanFragment)
             }
+
         }
 
         return binding.root

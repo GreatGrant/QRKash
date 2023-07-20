@@ -31,7 +31,7 @@ class DashboardActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // Hide the bottom navigation view when navigating to specific fragments
             val hideBottomNav = when (destination.id) {
-                R.id.qrScanFragment2, R.id.qrGenerateFragment2, R.id.virtualAccountFragment2, R.id.transferFragment2 -> true
+                R.id.qrScanFragment2, R.id.qrGenerateFragment2, R.id.virtualAccountFragment2, R.id.transferFragment2, R.id.navigation_profile -> true
                 else -> false
             }
 

@@ -65,6 +65,7 @@ private var _binding: FragmentHomeBinding? = null
                 showTopupOptionsDialog()
             }
 
+
             btnTransfer.setOnClickListener {
                 // Check if the camera permission is already granted
                 if (ContextCompat.checkSelfPermission(
@@ -79,6 +80,11 @@ private var _binding: FragmentHomeBinding? = null
                     requestCameraPermission()
                 }
             }
+
+            ivAvatar.setOnClickListener {
+                findNavController().navigate(R.id.action_navigation_home_to_navigation_profile)
+            }
+
         }
 
         return binding.root
