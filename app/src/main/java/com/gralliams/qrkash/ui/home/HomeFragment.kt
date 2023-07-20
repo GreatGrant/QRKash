@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.R
+import com.gralliams.qrkash.TransactionsViewModelFactory
 import com.gralliams.qrkash.adapters.TransactionsAdapter
 import com.gralliams.qrkash.databinding.FragmentHomeBinding
 import com.gralliams.qrkash.db.TransactionItem
@@ -24,7 +25,7 @@ import com.gralliams.qrkash.viewmodel.TransactionsViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
 
 class HomeFragment : Fragment() {
-    private lateinit var transactionsViewModel: TransactionsViewModel
+//    private lateinit var transactionsViewModel: TransactionsViewModel
     private var _binding: FragmentHomeBinding? = null
   // This property is only valid between onCreateView and
   // onDestroyView.
@@ -47,7 +48,10 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
-        transactionsViewModel = ViewModelProvider(this)[TransactionsViewModel::class.java]
+//todo() fix this bug
+//        val application = requireActivity().application // or requireContext().applicationContext if you prefer
+//        val viewModelFactory = TransactionsViewModelFactory(application)
+//        transactionsViewModel = ViewModelProvider(this, viewModelFactory)[TransactionsViewModel::class.java]
 
 
 
@@ -104,11 +108,11 @@ class HomeFragment : Fragment() {
         transactionsAdapter = TransactionsAdapter(requireContext(), emptyList())
         binding.listViewTransactionHistory.adapter = transactionsAdapter
 
-        // Observe changes in the LiveData and update the ListView
-        transactionsViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
-            transactionsAdapter.clear()
-            transactionsAdapter.addAll(transactions)
-        }
+        //todo() Observe changes in the LiveData and update the ListView
+//        transactionsViewModel.transactions.observe(viewLifecycleOwner) { transactions ->
+//            transactionsAdapter.clear()
+//            transactionsAdapter.addAll(transactions)
+//        }
 
 
     }

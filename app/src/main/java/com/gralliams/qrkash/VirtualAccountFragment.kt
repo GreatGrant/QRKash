@@ -39,7 +39,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class VirtualAccountFragment : Fragment() {
-    private lateinit var transactionsViewModel: TransactionsViewModel
+//    private lateinit var transactionsViewModel: TransactionsViewModel
     private lateinit var binding: FragmentVirtualAccountBinding
     private lateinit var progressBar: ProgressBar
     private val viewModel: VirtualAccountViewModel by lazy {
@@ -53,7 +53,8 @@ class VirtualAccountFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        transactionsViewModel = ViewModelProvider(this)[TransactionsViewModel::class.java]
+//        todo() fix this bug
+//        transactionsViewModel = ViewModelProvider(this)[TransactionsViewModel::class.java]
         val firebaseAuth = FirebaseAuth.getInstance()
         val user = firebaseAuth.currentUser
         val email = user?.email
@@ -160,8 +161,8 @@ class VirtualAccountFragment : Fragment() {
             response?.let {
                 sendWebhook(transferRequest)
                 progressBar.visibility = View.GONE
-                val newTransaction = TransactionItem("${it.data.fullName}", (it.data.amount).toDouble())
-                transactionsViewModel.addTransaction(newTransaction)
+                // todo() val newTransaction = TransactionItem("${it.data.fullName}", (it.data.amount).toDouble())
+                // todo() transactionsViewModel.addTransaction(newTransaction)
                 showBottomSheet("Transaction with ref${it.data.reference} is successful. Check your wallet.", R.drawable.baseline_security_update_good_24)
 
             }
