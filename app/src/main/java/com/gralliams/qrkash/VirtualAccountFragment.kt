@@ -1,5 +1,9 @@
 package com.gralliams.qrkash
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -163,6 +168,7 @@ class VirtualAccountFragment : Fragment() {
                 progressBar.visibility = View.GONE
                 // todo() val newTransaction = TransactionItem("${it.data.fullName}", (it.data.amount).toDouble())
                 // todo() transactionsViewModel.addTransaction(newTransaction)
+                showNotification("You just received ${it.data.amount} ")
                 showBottomSheet("Transaction with ref${it.data.reference} is successful. Check your wallet.", R.drawable.baseline_security_update_good_24)
 
             }
@@ -210,5 +216,27 @@ class VirtualAccountFragment : Fragment() {
             true
         }
     }
+
+    private fun showNotification(message: String) {
+        val channelId = "default_channel_id"
+        val channelName = "Default Channel"
+        val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(requireContext(), channelId)
+            .setSmallIcon(R.drawable.ic_notifications_black_24dp) // Replace with your notification icon
+            .setContentTitle("Transaction Successful")
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+
+        val notificationId = 1 // Unique ID for the notification
+        notificationManager.notify(notificationId, notificationBuilder.build())
+    }
+
 
 }

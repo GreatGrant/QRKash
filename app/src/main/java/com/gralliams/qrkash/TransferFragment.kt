@@ -1,7 +1,10 @@
 package com.gralliams.qrkash
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -86,6 +90,7 @@ class TransferFragment : Fragment() {
                 }else{
                     walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
                         val message = "Transaction ref: 363378911df712.\nAmount: ${etAmount.text.toString()}\nRecipient: ${etUsername.text.toString()}\nBank: ${etBank.text.toString()}\nAccount: ${etAccountNumber.text.toString()}\nStatus: Success\nBalance: ${balance}"
+                        showNotification("$message")
                         showBottomSheet(message, R.drawable.baseline_security_update_good_24)
                     }
                 }
@@ -176,6 +181,28 @@ class TransferFragment : Fragment() {
             true
         }
     }
+
+    private fun showNotification(message: String) {
+        val channelId = "default_channel_id"
+        val channelName = "Default Channel"
+        val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(requireContext(), channelId)
+            .setSmallIcon(R.drawable.ic_notifications_black_24dp) // Replace with your notification icon
+            .setContentTitle("Transaction Successful")
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+
+        val notificationId = 1 // Unique ID for the notification
+        notificationManager.notify(notificationId, notificationBuilder.build())
+    }
+
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        if (item.itemId == android.R.id.home) {
