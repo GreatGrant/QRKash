@@ -17,11 +17,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.R
 import com.gralliams.qrkash.databinding.FragmentHomeBinding
 import com.gralliams.qrkash.viewmodel.DashboardViewModel
+import com.gralliams.qrkash.viewmodel.TransactionsViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
 
 class HomeFragment : Fragment() {
-
-private var _binding: FragmentHomeBinding? = null
+    private lateinit var transactionsViewModel: TransactionsViewModel
+    private var _binding: FragmentHomeBinding? = null
   // This property is only valid between onCreateView and
   // onDestroyView.
 
@@ -43,6 +44,7 @@ private var _binding: FragmentHomeBinding? = null
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
+        transactionsViewModel = ViewModelProvider(this)[TransactionsViewModel::class.java]
 
 
 
