@@ -56,7 +56,6 @@ class VirtualAccountFragment : Fragment() {
         val firstName = user?.displayName?.split(" ")?.get(0)
         val lastName = user?.displayName?.split(" ")?.get(1)
 
-        Toast.makeText(requireContext(), "$email $firstName $lastName", Toast.LENGTH_SHORT).show()
 
         val requestBody = VirtualAccountRequest(
             email = email ?: "",
@@ -132,7 +131,6 @@ class VirtualAccountFragment : Fragment() {
 
         viewModel.error.observe(this) { errorMessage ->
             progressBar.visibility = View.GONE // Hide the progress bar
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
             showBottomSheet(errorMessage, R.drawable.baseline_signal_wifi_connected_no_internet_4_24)
         }
     }
