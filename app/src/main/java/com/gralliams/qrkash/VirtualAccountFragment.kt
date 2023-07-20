@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
@@ -13,6 +14,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -130,6 +133,7 @@ class VirtualAccountFragment : Fragment() {
         viewModel.error.observe(this) { errorMessage ->
             progressBar.visibility = View.GONE // Hide the progress bar
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            showBottomSheet(errorMessage, R.drawable.baseline_signal_wifi_connected_no_internet_4_24)
         }
     }
 
@@ -154,7 +158,8 @@ class VirtualAccountFragment : Fragment() {
             response?.let {
                 sendWebhook(transferRequest)
                 progressBar.visibility = View.GONE
-                showBottomSheet(it)
+
+                showBottomSheet("Transaction with ref${it.data.reference} is successful. Check your wallet.", R.drawable.baseline_security_update_good_24)
 
             }
         }
@@ -166,15 +171,18 @@ class VirtualAccountFragment : Fragment() {
         walletViewModel.updateBalance(newBalance)
     }
 
-    private fun showBottomSheet(response: TransferResponse) {
+    private fun showBottomSheet(message: String, image: Int) {
         val view = BottomSheetLayoutBinding.inflate(layoutInflater)
         val dialog = BottomSheetDialog(requireContext())
+        Glide.with(this)
+            .load(image)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(view.animationView)
         dialog.setContentView(view.root)
         dialog.show()
 
         view.apply {
-            messageTextView.text =
-                "Transaction with ref${response.data.reference} is successful. Check your wallet."
+            messageTextView.text = message
 
             closeButton.setOnClickListener {
                 // Dismiss the dialog
