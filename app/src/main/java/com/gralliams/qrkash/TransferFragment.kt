@@ -28,7 +28,7 @@ import com.gralliams.qrkash.viewmodel.WalletViewModel
 
 class TransferFragment : Fragment() {
     private lateinit var binding: FragmentTransferBinding
-    private val walletViewModel: WalletViewModel by activityViewModels()
+    private lateinit var walletViewModel: WalletViewModel
     private lateinit var sharedViewModel: ScannedSharedViewModel
 
 
@@ -48,6 +48,7 @@ class TransferFragment : Fragment() {
     private fun setupUI() {
 //        val scannedData = TransferFragmentArgs.fromBundle(requireArguments()).qrResult
         sharedViewModel = ViewModelProvider(requireActivity())[ScannedSharedViewModel::class.java]
+        walletViewModel = ViewModelProvider(requireActivity())[WalletViewModel::class.java]
 
         sharedViewModel.scannedData.observe(viewLifecycleOwner){scannedText ->
             decryptQR(scannedText)
