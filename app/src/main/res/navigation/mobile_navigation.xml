@@ -48,7 +48,13 @@
         android:id="@+id/transferFragment2"
         tools:layout="@layout/fragment_transfer"
         android:name="com.gralliams.qrkash.TransferFragment"
-        android:label="TransferFragment" />
+        android:label="TransferFragment" >
+        <action
+            android:id="@+id/action_transferFragment2_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/transferFragment2"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/virtualAccountFragment2"
         tools:layout="@layout/fragment_virtual_account"

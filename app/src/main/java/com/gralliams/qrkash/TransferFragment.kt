@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -156,6 +157,7 @@ class TransferFragment : Fragment() {
         view.closeButton.setOnClickListener {
             // Dismiss the dialog
             dialog.dismiss()
+            findNavController().navigate(R.id.action_transferFragment2_to_navigation_home)
         }
     }
 
