@@ -1,15 +1,21 @@
 package com.gralliams.qrkash
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -71,7 +77,21 @@ class TransferFragment : Fragment() {
                 val newBalance = currentBalance - enteredAmount
                 walletViewModel.updateBalance(newBalance)
 
-                showBottomSheet(etUsername.text.toString(), etAmount.text.toString(), etAccountNumber.text.toString(), etBank.text.toString())
+                if (!isNetworkConnected(requireContext())) {
+                    // No network connection, show a message or handle it as needed
+                    showBottomSheet("No internet connection. Please check your network settings.", R.drawable.baseline_signal_wifi_connected_no_internet_4_24)
+                    return@setOnClickListener
+                }else{
+
+                    walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
+                        val message = "Transaction ref: 363378911df712.\nAmount: ${etAmount.text.toString()}\nRecipient: ${etUsername.text.toString()}\nBank: ${etBank.text.toString()}\nAccount: ${etAccountNumber.text.toString()}\nStatus: Success\nBalance: ${balance}}"
+                        showBottomSheet(message, R.drawable.baseline_security_update_good_24)
+                    }
+
+                }
+
+
+
             }
         }
     }
@@ -114,15 +134,25 @@ class TransferFragment : Fragment() {
         }
     }
 
-    private fun showBottomSheet(recipient: String, amount: String, account: String, bank: String) {
+    private fun isNetworkConnected(context: Context) =
+        (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
+            getNetworkCapabilities(activeNetwork)?.run {
+                hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                        || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                        || hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+            } ?: false
+        }
+
+    private fun showBottomSheet(message: String, image: Int) {
         val view = BottomSheetLayoutBinding.inflate(layoutInflater)
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(view.root)
+        Glide.with(this)
+            .load(image)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(view.animationView)
+        dialog.setContentView(view.root)
         dialog.show()
-
-        walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
-            view.messageTextView.text = "Transaction ref: 363378911df712.\nAmount: $amount\nRecipient: $recipient\nBank: $bank\nStatus: Success\nBalance: $balance"
-        }
 
         view.closeButton.setOnClickListener {
             // Dismiss the dialog
