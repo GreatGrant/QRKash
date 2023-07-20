@@ -23,6 +23,7 @@ import com.gralliams.qrkash.model.TransferRequest
 import com.gralliams.qrkash.model.TransferResponse
 import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.repository.VirtualAccountRepository
+import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
 import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -40,7 +41,7 @@ class VirtualAccountFragment : Fragment() {
             VirtualAccountViewModelFactory(VirtualAccountRepository(RetrofitClient.apiService))
         )[VirtualAccountViewModel::class.java]
     }
-    private val walletViewModel: WalletViewModel by activityViewModels()
+    private lateinit var walletViewModel: WalletViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,6 +139,7 @@ class VirtualAccountFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_virtual_account, container, false)
 
+        walletViewModel = ViewModelProvider(requireActivity())[WalletViewModel::class.java]
         progressBar = binding.progressBar
         progressBar.visibility = View.VISIBLE // Show the progress bar
 
