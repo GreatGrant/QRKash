@@ -23,11 +23,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.api.RetrofitClient
 import com.gralliams.qrkash.databinding.BottomSheetLayoutBinding
 import com.gralliams.qrkash.databinding.FragmentVirtualAccountBinding
+import com.gralliams.qrkash.db.TransactionItem
 import com.gralliams.qrkash.model.TransferRequest
 import com.gralliams.qrkash.model.TransferResponse
 import com.gralliams.qrkash.model.VirtualAccountRequest
 import com.gralliams.qrkash.repository.VirtualAccountRepository
 import com.gralliams.qrkash.viewmodel.ScannedSharedViewModel
+import com.gralliams.qrkash.viewmodel.TransactionsViewModel
 import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
 import com.gralliams.qrkash.viewmodel.WalletViewModel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -37,6 +39,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class VirtualAccountFragment : Fragment() {
+    private lateinit var transactionsViewModel: TransactionsViewModel
     private lateinit var binding: FragmentVirtualAccountBinding
     private lateinit var progressBar: ProgressBar
     private val viewModel: VirtualAccountViewModel by lazy {
@@ -50,6 +53,7 @@ class VirtualAccountFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        transactionsViewModel = ViewModelProvider(this)[TransactionsViewModel::class.java]
         val firebaseAuth = FirebaseAuth.getInstance()
         val user = firebaseAuth.currentUser
         val email = user?.email
@@ -156,7 +160,8 @@ class VirtualAccountFragment : Fragment() {
             response?.let {
                 sendWebhook(transferRequest)
                 progressBar.visibility = View.GONE
-
+                val newTransaction = TransactionItem("${it.data.fullName}", (it.data.amount).toDouble())
+                transactionsViewModel.addTransaction(newTransaction)
                 showBottomSheet("Transaction with ref${it.data.reference} is successful. Check your wallet.", R.drawable.baseline_security_update_good_24)
 
             }
