@@ -6,12 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.R
+import com.gralliams.qrkash.VirtualAccountViewModelFactory
+import com.gralliams.qrkash.api.RetrofitClient
 import com.gralliams.qrkash.databinding.FragmentProfileBinding
+import com.gralliams.qrkash.model.VirtualAccountRequest
+import com.gralliams.qrkash.repository.VirtualAccountRepository
+import com.gralliams.qrkash.viewmodel.VirtualAccountViewModel
 
 class ProfileFragment : Fragment() {
-
+    private val viewModel: VirtualAccountViewModel by lazy {
+        ViewModelProvider(
+            this,
+            VirtualAccountViewModelFactory(VirtualAccountRepository(RetrofitClient.apiService))
+        )[VirtualAccountViewModel::class.java]
+    }
     private lateinit var binding: FragmentProfileBinding
 
     override fun onCreateView(
@@ -33,6 +44,12 @@ class ProfileFragment : Fragment() {
             // Set the username and email in the corresponding TextViews
             binding.tvFullName.text = username
             binding.tvEmail.text = email
+
+
+            viewModel.virtualAccountResponse.observe(requireActivity()) { response ->
+                binding.tvBio.text = "Virtual acccout number: ${response.data.accountNumber}, ${response.data.bankName}"
+            }
+
         }
 
         // Handle button clicks or other actions if needed
