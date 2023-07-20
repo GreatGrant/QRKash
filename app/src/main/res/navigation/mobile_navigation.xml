@@ -53,7 +53,13 @@
         android:id="@+id/virtualAccountFragment2"
         tools:layout="@layout/fragment_virtual_account"
         android:name="com.gralliams.qrkash.VirtualAccountFragment"
-        android:label="VirtualAccountFragment" />
+        android:label="VirtualAccountFragment" >
+        <action
+            android:id="@+id/action_virtualAccountFragment2_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/qrScanFragment2"
         android:name="com.gralliams.qrkash.QrScanFragment"

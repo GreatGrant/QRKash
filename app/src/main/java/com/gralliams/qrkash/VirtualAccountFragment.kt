@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -178,6 +179,7 @@ class VirtualAccountFragment : Fragment() {
             closeButton.setOnClickListener {
                 // Dismiss the dialog
                 dialog.dismiss()
+                findNavController().navigate(R.id.action_virtualAccountFragment2_to_navigation_home)
             }
         }
     }
@@ -188,12 +190,12 @@ class VirtualAccountFragment : Fragment() {
         errorMessage: String
     ): Boolean {
         val text = editText.text.toString().trim()
-        if (text.isEmpty()) {
+        return if (text.isEmpty()) {
             textInputLayout.error = errorMessage
-            return false
+            false
         } else {
             textInputLayout.error = null
-            return true
+            true
         }
     }
 
