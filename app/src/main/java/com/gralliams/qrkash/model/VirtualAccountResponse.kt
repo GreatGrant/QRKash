@@ -68,4 +68,4 @@ data class TransferData(
     @SerializedName("bank_name") val bankName: String
 )
 
-data class TransactionItem(val description: String, val amount: Double)
+
