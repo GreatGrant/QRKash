@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.gralliams.qrkash.R
 import com.gralliams.qrkash.VirtualAccountViewModelFactory
@@ -24,6 +25,7 @@ class ProfileFragment : Fragment() {
         )[VirtualAccountViewModel::class.java]
     }
     private lateinit var binding: FragmentProfileBinding
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +35,7 @@ class ProfileFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
 
         // Get the current user from Firebase Authentication
-        val currentUser = FirebaseAuth.getInstance().currentUser
+        val currentUser = auth.currentUser
 
         // Check if the user is authenticated and not null
         if (currentUser != null) {
@@ -55,5 +57,20 @@ class ProfileFragment : Fragment() {
         // Handle button clicks or other actions if needed
 
         return binding.root
+    }
+
+    private fun performLogout() {
+        // Check if the user is currently logged in before attempting to log out
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            logoutUser()
+        } else {
+            // The user is already logged out
+            // Handle this scenario, if needed
+        }
+    }
+
+    private fun logoutUser() {
+        auth.signOut()
     }
 }
