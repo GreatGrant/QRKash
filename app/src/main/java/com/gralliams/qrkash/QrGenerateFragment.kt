@@ -1,10 +1,12 @@
 package com.gralliams.qrkash
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,21 +37,34 @@ class QrGenerateFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_qr_generate, container, false)
         viewModel = ViewModelProvider(this)[QRCodeViewModel::class.java]
 
-        binding.generateButton.setOnClickListener {
-            val amount = binding.etAmount.text.toString()
-            val recipient = FirebaseAuth.getInstance().currentUser?.displayName
-
-            val stringToEncrypt = "Recipient: $recipient, amount: $amount, account: 7824822527, email: ${FirebaseAuth.getInstance().currentUser?.email}, bank: WEMA BANK"
-
-            viewModel.generateQRCode(stringToEncrypt)
+        binding.etAmount.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || event?.keyCode == KeyEvent.KEYCODE_ENTER) {
+                // Perform your action here
+                generateQRCode()
+                true
+            } else {
+                false
+            }
         }
 
-        viewModel.qrCodeImage.observe(viewLifecycleOwner, Observer { bitmap ->
-            Glide.with(requireContext())
-                .load(bitmap)
-                .into(binding.imageViewInsideCard)
-        })
 
         return binding.root
+    }
+
+    private fun generateQRCode() {
+        val amount = binding.etAmount.text.toString()
+        val recipient = FirebaseAuth.getInstance().currentUser?.displayName
+
+        val stringToEncrypt = "Recipient: $recipient, amount: $amount, account: 7824822527, email: ${FirebaseAuth.getInstance().currentUser?.email}, bank: WEMA BANK"
+
+        viewModel.apply {
+            generateQRCode(stringToEncrypt)
+                qrCodeImage.observe(viewLifecycleOwner, Observer { bitmap ->
+                    Glide.with(requireContext())
+                        .load(bitmap)
+                        .into(binding.imageViewInsideCard)
+                })
+        }
+
     }
 }
