@@ -82,12 +82,10 @@ class TransferFragment : Fragment() {
                     showBottomSheet("No internet connection. Please check your network settings.", R.drawable.baseline_signal_wifi_connected_no_internet_4_24)
                     return@setOnClickListener
                 }else{
-
                     walletViewModel.balanceLiveData.observe(viewLifecycleOwner) { balance ->
                         val message = "Transaction ref: 363378911df712.\nAmount: ${etAmount.text.toString()}\nRecipient: ${etUsername.text.toString()}\nBank: ${etBank.text.toString()}\nAccount: ${etAccountNumber.text.toString()}\nStatus: Success\nBalance: ${balance}}"
                         showBottomSheet(message, R.drawable.baseline_security_update_good_24)
                     }
-
                 }
 
 
@@ -151,6 +149,7 @@ class TransferFragment : Fragment() {
             .load(image)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(view.animationView)
+        view.messageTextView.text = message
         dialog.setContentView(view.root)
         dialog.show()
 
