@@ -120,7 +120,6 @@ class VirtualAccountFragment : Fragment() {
                         }
 
                         // All required fields are filled, proceed with the form submission
-
                         val transferRequestBody =
                             TransferRequest(
                                 accountBank = bankEditText.text.toString(),
