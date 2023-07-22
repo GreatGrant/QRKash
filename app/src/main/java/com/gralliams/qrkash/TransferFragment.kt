@@ -203,14 +203,4 @@ class TransferFragment : Fragment() {
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == android.R.id.home) {
-//            // Navigate to HomeFragment when the back button is pressed
-//            findNavController().navigate(R.id.action_transferFragment2)
-//            return true
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-
 }
