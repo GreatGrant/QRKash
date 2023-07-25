@@ -2,7 +2,8 @@
 
 QRKash is a mobile wallet app that enables users to receive and send payments powered by QR code technology. This app was developed during the Financial Services Innovators (FSI) Cashless Campus Innovation Challenge (a hackathon).
 
-![QRKash App Demo](link-to-demo-gif-or-screenshot)
+![QRSPlash](https://github.com/GreatGrant/QRKash/assets/62026220/7cfe2177-0a8f-4ec5-897e-3fcde622c21e)
+
 
 ## Features
 
@@ -44,6 +45,20 @@ buildConfigField "String", "API_KEY", "\"your_flutterwave_api_key_here\""
 ```
 
 ## Screenshots
+![1](https://github.com/GreatGrant/QRKash/assets/62026220/093491b8-b63f-4a10-b465-ae2ccdb7aae1)
+
+![20](https://github.com/GreatGrant/QRKash/assets/62026220/6bb4cf4c-8588-41d0-84ac-46363fac79d3)
+
+![2](https://github.com/GreatGrant/QRKash/assets/62026220/1c95ecd8-1e37-4549-86b7-cdd7fd7130d8)
+
+![3](https://github.com/GreatGrant/QRKash/assets/62026220/b273b623-8c79-4f2c-b3ab-57ff247caff2)
+
+![4](https://github.com/GreatGrant/QRKash/assets/62026220/d1e9455a-c040-4246-98ff-bee49374ff68)
+
+![5](https://github.com/GreatGrant/QRKash/assets/62026220/e5ca3812-7ca2-4fc7-8291-ea15f33e468f)
+
+
+
 
 ## License
 This project is licensed under the MIT License.
