@@ -36,7 +36,7 @@ To run QRKash on your local machine, follow these steps:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/YourUsername/QRKash.git
+git clone https://github.com/GreatGrant/QRKash.git
 ```
 
 2. Open the project in Android Studio.
@@ -48,22 +48,6 @@ QRKash relies on the Flutterwave API for virtual account creation and payment tr
 ```bash
 buildConfigField "String", "API_KEY", "\"your_flutterwave_api_key_here\""
 ```
-
-## Screenshots
-![1](https://github.com/GreatGrant/QRKash/assets/62026220/093491b8-b63f-4a10-b465-ae2ccdb7aae1)
-
-![20](https://github.com/GreatGrant/QRKash/assets/62026220/6bb4cf4c-8588-41d0-84ac-46363fac79d3)
-
-![2](https://github.com/GreatGrant/QRKash/assets/62026220/1c95ecd8-1e37-4549-86b7-cdd7fd7130d8)
-
-![3](https://github.com/GreatGrant/QRKash/assets/62026220/b273b623-8c79-4f2c-b3ab-57ff247caff2)
-
-![4](https://github.com/GreatGrant/QRKash/assets/62026220/d1e9455a-c040-4246-98ff-bee49374ff68)
-
-![5](https://github.com/GreatGrant/QRKash/assets/62026220/e5ca3812-7ca2-4fc7-8291-ea15f33e468f)
-
-
-
 
 ## License
 This project is licensed under the MIT License.
